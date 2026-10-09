@@ -20,7 +20,7 @@ html,body{height:100%;margin:0}*{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;justify-content:center}
 .app{width:100%;max-width:430px;height:100%;display:flex;flex-direction:column;position:relative;overflow:hidden}
 header{display:flex;align-items:center;gap:10px;padding:10px 14px}
-header img{width:40px;height:40px;border-radius:12px;cursor:pointer}
+header img{width:auto;height:44px;cursor:pointer;filter:drop-shadow(0 2px 3px #0002)}
 header b{font-size:19px;font-weight:800}
 main{flex:1;overflow-y:auto;padding:6px 18px 130px}
 h1{font-size:26px;margin:6px 0 14px;font-weight:800}
@@ -130,8 +130,68 @@ textarea{width:100%;min-height:130px;font:500 13px ui-monospace,Menlo,monospace;
 .fl{display:block;margin-top:8px;font-size:14px}.sm{font-size:12px;opacity:.7;margin:6px 2px}
 .cols{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.cols span{background:var(--sky);border-radius:10px;padding:5px 9px;font-size:12px;font-weight:700}
 .sec{background:var(--sky);color:var(--ink)}
-</style></head><body><div class="app">
-<header><button class="gear" id="gear" aria-label="Ajustes">⚙️<span class="sync" id="sync" data-s="loading"></span></button><img id="logo" src="icon-192.png" alt="Cookies & Milk"><b>Cookies & Milk 💰</b></header>
+
+
+#splash{position:fixed;inset:0;z-index:6000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(#CFE5F3,#FCF9EF 78%);transition:opacity .45s;overflow:hidden;cursor:pointer}
+#splash.out{opacity:0;pointer-events:none}
+#splash svg{width:min(100vw,520px);height:auto;overflow:visible;animation:sppop .6s cubic-bezier(.2,1.4,.4,1) both}
+#splash .t{font:800 26px system-ui,sans-serif;color:#3C4B58;margin-top:4px;animation:spin .8s .3s both}
+#splash small{font:600 12px system-ui,sans-serif;color:#6b7c88;margin-top:6px;opacity:.7}
+@keyframes sppop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+@keyframes spin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#splash svg *{animation-duration:6.6s;animation-timing-function:ease-in-out;animation-fill-mode:both;animation-iteration-count:1}
+.lidc{animation-name:lidc}
+@keyframes lidc{0%,8%{transform:translate(0,0) rotate(0)}20%{transform:translate(0,-260px) rotate(0)}34%{transform:translate(-330px,-340px) rotate(-14deg)}50%{transform:translate(-330px,-350px) rotate(-17deg)}64%{transform:translate(-330px,-340px) rotate(-14deg)}76%{transform:translate(-90px,-300px) rotate(-5deg)}82%{transform:translate(0,-70px) rotate(0)}85%{transform:translate(0,0) rotate(0)}87%{transform:translate(0,6px)}89%,100%{transform:translate(0,0)}}
+.lha{animation-name:lha}
+@keyframes lha{0%{transform:translate(0,1800px)}8%,84%{transform:translate(0,0)}96%,100%{transform:translate(0,1800px)}}
+.lfist{animation-name:lfist}.lopen{animation-name:lopen}
+@keyframes lfist{0%,84.9%{opacity:1}85%,100%{opacity:0}}
+@keyframes lopen{0%,84.9%{opacity:0}85%,100%{opacity:1}}
+.rh{animation-name:rh;transform:translate(1619px,1959px) rotate(-22deg)}
+@keyframes rh{0%{transform:translate(1619px,1959px) rotate(-22deg)}8%{transform:translate(944px,290px) rotate(-22deg)}20%{transform:translate(944px,30px) rotate(-22deg)}25%{transform:translate(1130px,-70px) rotate(-35deg)}35%{transform:translate(694px,-170px) rotate(215deg)}44%,46%{transform:translate(694px,232px) rotate(215deg)}58%{transform:translate(694px,-328px) rotate(215deg)}61%{transform:translate(694px,-343px) rotate(215deg)}64%{transform:translate(694px,-328px) rotate(215deg)}80%,100%{transform:translate(1594px,-2328px) rotate(215deg)}}
+.rfist{animation-name:rfist}.ropen{animation-name:ropen}
+@keyframes rfist{0%,21.9%{opacity:1}22%,44.9%{opacity:0}45%,100%{opacity:1}}
+@keyframes ropen{0%,21.9%{opacity:0}22%,44.9%{opacity:1}45%,100%{opacity:0}}
+.bill{animation-name:bill}
+@keyframes bill{0%,46%{transform:translate(0,0)}58%{transform:translate(0,-560px)}61%{transform:translate(0,-575px)}64%{transform:translate(0,-560px)}80%,100%{transform:translate(900px,-2560px)}}
+.spk{animation-name:spk;transform:scale(0)}
+@keyframes spk{0%,86%{transform:scale(0) rotate(0)}91%{transform:scale(1) rotate(40deg)}97%,100%{transform:scale(0) rotate(90deg)}}
+@media (prefers-reduced-motion:reduce){#splash svg *{animation:none!important}}
+
+.yb{width:100%;margin-top:10px;border:0;border-radius:16px;background:var(--sun,#FFE49A);color:var(--ink);font:700 15px system-ui;padding:12px;cursor:pointer}
+@keyframes slR{from{transform:translateX(38px);opacity:.2}to{transform:none;opacity:1}}@keyframes slL{from{transform:translateX(-38px);opacity:.2}to{transform:none;opacity:1}}
+</style></head><body><div id="splash" aria-label="Cargando Cookies &amp; Milk"><svg viewBox="-140 -640 1534 1894" xmlns="http://www.w3.org/2000/svg" role="img">
+<defs>
+<linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE0C4"/><stop offset="1" stop-color="#F7B994"/></linearGradient>
+<linearGradient id="slv" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B5D8EE"/><stop offset="1" stop-color="#7FB1D3"/></linearGradient>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C8EBB9"/><stop offset="1" stop-color="#86C98A"/></linearGradient>
+<clipPath id="slot"><rect x="-1000" y="-3000" width="4000" height="3345"/></clipPath>
+<g id="HO"><g stroke-linecap="round" fill="none"><path d="M-72 -40 Q-130 -70 -140 -140" stroke="#E39A74" stroke-width="62"/><path d="M-72 -40 Q-130 -70 -140 -140" stroke="url(#skin)" stroke-width="50"/><path d="M-66 -120 L-74 -215" stroke="#E39A74" stroke-width="54"/><path d="M-22 -120 L-24 -242" stroke="#E39A74" stroke-width="54"/><path d="M22 -120 L26 -232" stroke="#E39A74" stroke-width="54"/><path d="M66 -120 L76 -206" stroke="#E39A74" stroke-width="54"/><path d="M-66 -120 L-74 -215" stroke="url(#skin)" stroke-width="42"/><path d="M-22 -120 L-24 -242" stroke="url(#skin)" stroke-width="42"/><path d="M22 -120 L26 -232" stroke="url(#skin)" stroke-width="42"/><path d="M66 -120 L76 -206" stroke="url(#skin)" stroke-width="42"/></g><rect x="-92" y="-195" width="184" height="222" rx="72" fill="url(#skin)" stroke="#E39A74" stroke-width="6"/><ellipse cx="-34" cy="-130" rx="30" ry="46" fill="#fff" opacity=".28"/><ellipse cx="-66" cy="-232" rx="9" ry="16" fill="#fff" opacity=".4"/><ellipse cx="-22" cy="-250" rx="9" ry="16" fill="#fff" opacity=".4"/><rect x="-80" y="18" width="160" height="2000" fill="url(#slv)"/><path d="M-50 100 L-50 2000 M26 100 L26 2000" stroke="#fff" stroke-opacity=".18" stroke-width="12"/><rect x="-92" y="-4" width="184" height="66" rx="24" fill="#FFF3D6" stroke="#E5D3A0" stroke-width="5"/></g><g id="HF"><rect x="-94" y="-218" width="188" height="246" rx="80" fill="url(#skin)" stroke="#E39A74" stroke-width="6"/><g stroke="#E39A74" stroke-width="6" stroke-linecap="round" fill="none"><path d="M-47 -205 L-47 -140"/><path d="M0 -212 L0 -138"/><path d="M47 -205 L47 -140"/></g><ellipse cx="-68" cy="-182" rx="12" ry="18" fill="#fff" opacity=".38"/><ellipse cx="-22" cy="-190" rx="12" ry="18" fill="#fff" opacity=".38"/><ellipse cx="26" cy="-190" rx="12" ry="18" fill="#fff" opacity=".3"/><path d="M-76 -62 Q-30 -125 38 -108" fill="none" stroke="#E39A74" stroke-width="62" stroke-linecap="round"/><path d="M-76 -62 Q-30 -125 38 -108" fill="none" stroke="url(#skin)" stroke-width="50" stroke-linecap="round"/><ellipse cx="-30" cy="-98" rx="14" ry="8" fill="#fff" opacity=".4"/><rect x="-80" y="18" width="160" height="2000" fill="url(#slv)"/><path d="M-50 100 L-50 2000 M26 100 L26 2000" stroke="#fff" stroke-opacity=".18" stroke-width="12"/><rect x="-92" y="-4" width="184" height="66" rx="24" fill="#FFF3D6" stroke="#E5D3A0" stroke-width="5"/></g>
+
+</defs>
+<ellipse cx="627" cy="1235" rx="330" ry="34" fill="#3C4B58" opacity=".12"/>
+<image href="jar-body.webp" x="0" y="0" width="1254" height="1254"/>
+<g clip-path="url(#slot)"><g class="bill">
+ <rect x="530" y="345" width="190" height="400" rx="14" fill="url(#bg)" stroke="#5FA867" stroke-width="7"/>
+ <rect x="546" y="361" width="158" height="368" rx="8" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="4"/>
+ <circle cx="625" cy="470" r="46" fill="#fff" fill-opacity=".55" stroke="#5FA867" stroke-width="5"/>
+ <text x="625" y="488" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="56" fill="#3F8A4C">€</text>
+ <text x="625" y="620" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="76" fill="#3F8A4C">20</text>
+ <path d="M560 680 H690 M560 700 H690" stroke="#5FA867" stroke-width="6" stroke-linecap="round"/>
+</g></g>
+<g transform="translate(625 112)"><g class="lidc"><g transform="translate(-625 -112)">
+ <image href="jar-lid.webp" x="322" y="0" width="606" height="224"/>
+ <g transform="translate(310 290) rotate(22)"><g class="lha"><g class="lfist"><use href="#HF"/></g><g class="lopen"><use href="#HO"/></g></g></g>
+</g></g></g>
+<g class="rh"><g transform="scale(-1 1)"><g class="rfist"><use href="#HF"/></g><g class="ropen"><use href="#HO"/></g></g></g>
+<g transform="translate(300 360)"><path class="spk" style="animation-delay:0s" d="M0 -46 Q7 -7 46 0 Q7 7 0 46 Q-7 7 -46 0 Q-7 -7 0 -46Z" fill="#FFD84D" stroke="#fff" stroke-width="5"/></g>
+<g transform="translate(960 300) scale(.7)"><path class="spk" style="animation-delay:.12s" d="M0 -46 Q7 -7 46 0 Q7 7 0 46 Q-7 7 -46 0 Q-7 -7 0 -46Z" fill="#FFD84D" stroke="#fff" stroke-width="5"/></g>
+<g transform="translate(1010 760) scale(.55)"><path class="spk" style="animation-delay:.2s" d="M0 -46 Q7 -7 46 0 Q7 7 0 46 Q-7 7 -46 0 Q-7 -7 0 -46Z" fill="#FFD84D" stroke="#fff" stroke-width="5"/></g>
+<g transform="translate(260 800) scale(.5)"><path class="spk" style="animation-delay:.08s" d="M0 -46 Q7 -7 46 0 Q7 7 0 46 Q-7 7 -46 0 Q-7 -7 0 -46Z" fill="#FFD84D" stroke="#fff" stroke-width="5"/></g>
+</svg><div class="t">Cookies &amp; Milk 💰</div><small>Toca para saltar</small></div>
+<script>(function(){var sp=document.getElementById('splash');if(!sp)return;var g=0;function hide(){if(g)return;g=1;sp.classList.add('out');setTimeout(function(){sp.remove()},500)}
+sp.addEventListener('click',hide);var l=sp.querySelector('.lidc');l&&l.addEventListener('animationend',function(){setTimeout(hide,800)});setTimeout(hide,8600);if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)setTimeout(hide,900)})();</script><div class="app">
+<header><button class="gear" id="gear" aria-label="Ajustes">⚙️<span class="sync" id="sync" data-s="loading"></span></button><img id="logo" src="jar-sm.png" alt="Cookies & Milk"><b>Cookies & Milk 💰</b></header>
 <main id="main"></main>
 <nav id="nav"></nav>
 <div class="sheet" id="sheet"><div>
@@ -140,7 +200,7 @@ textarea{width:100%;min-height:130px;font:500 13px ui-monospace,Menlo,monospace;
 <button data-k="viajes" style="background:#63B5C6">✈️ Viajes</button></div></div>
 <div class="flow" id="flow"><div class="flagbg" id="fbg"></div><div class="ov" id="fov"></div><div class="fw" id="fw"></div></div><div class="toast" id="toast"></div>
 <div class="flow" id="setov"><div class="fw" id="setw"></div></div>
-<div class="login" id="login"><form id="lf"><img src="icon-192.png" alt=""><h2>Cookies &amp; Milk 💰</h2><input id="lem" type="email" name="email" autocomplete="username" placeholder="Correo electrónico" required><input id="lpw" type="password" name="password" autocomplete="current-password" placeholder="Contraseña" required><div class="err" id="lerr"></div><button class="save" type="submit" id="lbtn">ENTRAR</button></form></div>
+<div class="login" id="login"><form id="lf"><img src="jar-sm.png" alt=""><h2>Cookies &amp; Milk 💰</h2><input id="lem" type="email" name="email" autocomplete="username" placeholder="Correo electrónico" required><input id="lpw" type="password" name="password" autocomplete="current-password" placeholder="Contraseña" required><div class="err" id="lerr"></div><button class="save" type="submit" id="lbtn">ENTRAR</button></form></div>
 </div>
 <script>
 const $=s=>document.querySelector(s);
@@ -208,8 +268,8 @@ function accDash(a,y,emb){const col=a==='Naranja'?COL.N:COL.R,tot=accT(a,y),ms=A
  donut(cs.map((c,i)=>({n:c.e+' '+c.n,sh:ct?Math.round(c.v/ct*100)+'% del total':'',v:c.v,c:PAL[i],b:c.n==='Viajes'?'<small class="bd" style="opacity:.5">—</small>':badge(yAvg(a,c.n,y),hAvg(a,c.n)),attr:`data-p="cat" data-acc="${a}" data-y="${y}" data-c="${c.n}"`})))+
  `<h3>Media histórica</h3><div class="st"><div><small>Media mensual</small><b>${fmt0(av)}</b></div><div><small>Mes más caro</small><b>${fmt0(hv[imx])}</b><small>${lb(past[imx])}</small></div><div><small>Mes más barato</small><b>${fmt0(hv[imn])}</b><small>${lb(past[imn])}</small></div></div><h3>Tendencia</h3>`+trend(vals,av,col,lb(all[0]),lb(all[all.length-1]))+
  `<h3>Balance de ${y}</h3><div class="det"><div><small>Ingresos (fijos + extra)</small><b>${fmt0(inc)}</b></div><div><small>Gastos</small><b>${fmt0(tot)}</b></div><div><small>Balance</small>${balC(inc-tot)}</div></div><h3>Últimos gastos</h3>`+list([...cas(a,y),...trp(a,y)],10)}
-function accMonth(a,y,mo){const g=accT(a,y,mo),ex=exs(a,y,mo),xt=sum(ex),inc=INC[a]+xt,cs=cats(a,y,mo);
- return `<h1>${a==='Naranja'?'🟠':'⚫'} ${a} · ${months[mo-1]} ${y}</h1><div class="st"><div><small>Gastos del mes</small><b>${fmt0(g)}</b></div><div><small>Ingresos mensuales</small><b>${fmt0(INC[a])}</b></div><button data-xa="${a}" data-y="${y}" data-mo="${mo}"><small>Ingresos extra ＋</small><b>${fmt0(xt)}</b></button></div><div class="det" style="margin-top:8px"><div><small>Balance del mes</small>${balC(inc-g)}</div></div>`+
+function accMonth(a,y,mo,sh){const g=accT(a,y,mo),ex=exs(a,y,mo),xt=sum(ex),inc=INC[a]+xt,cs=cats(a,y,mo);
+ return `<h1>${a==='Naranja'?'🟠':'⚫'} ${sh?'Gastos '+a:a+' · '+months[mo-1]+' '+y}</h1><div class="st"><div><small>Gastos del mes</small><b>${fmt0(g)}</b></div><div><small>Ingresos mensuales</small><b>${fmt0(INC[a])}</b></div><button data-xa="${a}" data-y="${y}" data-mo="${mo}"><small>Ingresos extra ＋</small><b>${fmt0(xt)}</b></button></div><div class="det" style="margin-top:8px"><div><small>Balance del mes</small>${balC(inc-g)}</div></div>`+
  (ex.length?`<h3>Ingresos extra</h3>`+ex.map(x=>`<div class="ex" style="cursor:default"><span class="ec">${x.obs||'Ingreso extra'}</span><b>${fmt(x.amt)}</b></div>`).join(''):'')+
  `<h3>Categorías</h3><p class="hint">% frente a ${months[mo-1]} de ${y-1}</p>`+donut(cs.map((c,i)=>({n:c.e+' '+c.n,v:c.v,c:PAL[i],b:c.n==='Viajes'?'<small class="bd" style="opacity:.5">—</small>':badge(c.v,cm(a,c.n,y-1,mo)),attr:`data-p="cat" data-acc="${a}" data-y="${y}" data-c="${c.n}"`})))+`<h3>Gastos del mes</h3>`+list([...cas(a,y,mo),...trp(a,y,mo)])}
 function catScr(a,y,c){const x=c==='Viajes'?trp(a,y):cas(a,y).filter(e=>e.cat===c);
@@ -270,24 +330,28 @@ function viaMonth(y,mo){const x=trp(null,y,mo),ids=[...new Set(x.map(e=>e.trip))
 function tripScr(id){const t=trips.find(t=>t.id===id),x=E.filter(e=>e.trip===id);
  return `<h1 style="display:flex;align-items:center;gap:10px">${fl(t.iso)}${t.place}</h1><p class="hint" style="margin-top:-6px">${rng(t)} ${t.from.slice(0,4)} · ${t.country}</p><div class="st"><div><small>Total del viaje</small><b>${fmt0(sum(x))}</b></div><div style="grid-column:span 2"><small>Repercute en Casa</small><b>${fmt0(sum(x.filter(e=>e.to==='Naranja'||e.to==='Revolut')))}</b></div></div><h3>Por categoría</h3>`+donut(tcats(x))+`<h3>¿De dónde salió el dinero?</h3>`+donut([['🟠 Naranja',COL.N],['⚫ Revolut',COL.R],['👩 Alba','#E9A0A0'],['👨 David','#8FBEDC']].map(([n,c])=>({n,c,v:sum(x.filter(e=>e.to===n.slice(3)))})))+`<h3>Gastos del viaje</h3>`+x.sort((a,b)=>key(a).localeCompare(key(b))).map(row).join('')}
 const tot=()=>{const{y,m}=HM,n=accT('Naranja',y,m),r=accT('Revolut',y,m);return{n,r,v:sum(trp(null,y,m)),casa:n+r}};
+const AVM={1:'m',3:'m'};
+function mhead(yb){const cur=HM.y===NY&&HM.m===NM;
+ return `<div class="mh"><button data-hm="-1" aria-label="Mes anterior">‹</button><button class="mt" data-hm="open">${months[HM.m-1]} ${HM.y} ▾</button><button data-hm="1" aria-label="Mes siguiente">›</button></div>${cur?'':'<button class="cur" data-hm="now">Volver al mes actual</button>'}`+(HM.open?`<div class="mp"><div class="ys"><button data-hm="py-">‹</button><b>${HM.py}</b><button data-hm="py+">›</button></div><div class="mg">${MN.map((n,i)=>`<button class="${HM.py===HM.y&&i+1===HM.m?'on':''}" data-hm="pick" data-mo="${i+1}">${n}</button>`).join('')}</div>${yb?'<button class="yb" data-av="y">📅 Ver el año completo</button>':''}</div>`:'')}
 function home(m){const T=tot(),cur=HM.y===NY&&HM.m===NM;
  m.innerHTML=banner()+`<div class="mh"><button data-hm="-1" aria-label="Mes anterior">‹</button><button class="mt" data-hm="open">${months[HM.m-1]} ${HM.y} ▾</button><button data-hm="1" aria-label="Mes siguiente">›</button></div>${cur?'':'<button class="cur" data-hm="now">Volver al mes actual</button>'}`+(HM.open?`<div class="mp"><div class="ys"><button data-hm="py-">‹</button><b>${HM.py}</b><button data-hm="py+">›</button></div><div class="mg">${MN.map((n,i)=>`<button class="${HM.py===HM.y&&i+1===HM.m?'on':''}" data-hm="pick" data-mo="${i+1}">${n}</button>`).join('')}</div></div>`:'')+
  `<div class="total"><span>Total Casa</span><b>${fmt(T.casa)}</b></div>`+posTile('Naranja','#FF8A2B','var(--orbg)',1,fmt(T.n))+posTile('Revolut','#212327','var(--sky)',3,fmt(T.r))+`<div class="tile travel" data-go="4"><div><h2>Viajes</h2>${fmt(T.v)}</div><canvas id="g1" width="340" height="340" style="width:170px;height:170px"></canvas></div>`;
  start($('#g1'))}
 function render(){raf.forEach(cancelAnimationFrame);raf=[];const m=$('#main');
  if(tab===0)home(m);else{const s=topS();let h;
-  switch(s.n){case 'accyear':h=accDash(s.acc,s.y,1);break;case 'viayear':h=viaMain(s.y,1);break;case 'month':h=resMonth(s.y,s.mo);break;case 'accmonth':h=accMonth(s.acc,s.y,s.mo);break;case 'cat':h=catScr(s.acc,s.y,s.cat);break;case 'viamonth':h=viaMonth(s.y,s.mo);break;case 'trip':h=tripScr(s.id);break;default:h=tab===5?resMain(YR[5]):tab===4?viaMain(YR[4]):accDash(ACC[tab],YR[tab])}
+  switch(s.n){case 'accyear':h=accDash(s.acc,s.y,1);break;case 'viayear':h=viaMain(s.y,1);break;case 'month':h=resMonth(s.y,s.mo);break;case 'accmonth':h=accMonth(s.acc,s.y,s.mo);break;case 'cat':h=catScr(s.acc,s.y,s.cat);break;case 'viamonth':h=viaMonth(s.y,s.mo);break;case 'trip':h=tripScr(s.id);break;default:h=tab===5?resMain(YR[5]):tab===4?viaMain(YR[4]):AVM[tab]==='m'?mhead(1)+accMonth(ACC[tab],HM.y,HM.m,1):'<button class="bk" data-av="m">‹ Ver por meses</button>'+accDash(ACC[tab],YR[tab])}
   m.innerHTML=(ST[tab].length?'<button class="bk" data-bk>‹ Atrás</button>':'')+h;m.scrollTop=0;if($('#wm')||$('#lm'))initMap()}
  $('#nav').innerHTML=NAV.map(x=>x?`<button data-t="${x[0]}" class="${x[0]===tab?'on':''}"><span class="ic">${ICONS[x[0]===5?0:x[0]]}</span>${x[1]}</button>`:`<div class="gap"><button class="fab" id="fab" aria-label="Añadir gasto">${PLUS}</button></div>`).join('');
- $('#nav').querySelectorAll('button[data-t]').forEach(b=>b.onclick=()=>{const t=+b.dataset.t;if(t===tab)ST[t]=[];tab=t;render()});
+ $('#nav').querySelectorAll('button[data-t]').forEach(b=>b.onclick=()=>{const t=+b.dataset.t;if(t===tab)ST[t]=[];tab=t;HM.open=false;render()});
  $('#fab').onclick=()=>CAN?$('#sheet').classList.add('show'):toast('Solo lectura')}
 function tap(t){if(t.classList.contains('go'))return;const i=+t.dataset.go;
- const nav=()=>{YR[i]=HM.y;ST[i]=i===4?[{n:'viamonth',y:HM.y,mo:HM.m}]:[{n:'accmonth',acc:ACC[i],y:HM.y,mo:HM.m}];tab=i;render()};
+ const nav=()=>{YR[i]=HM.y;if(AVM[i])AVM[i]='m';HM.open=false;ST[i]=i===4?[{n:'viamonth',y:HM.y,mo:HM.m}]:[];tab=i;render()};
  if(!t.querySelector('.pos'))return nav();
  const s=t.querySelector('.scr');if(navigator.vibrate)navigator.vibrate(15);t.classList.add('go');
  setTimeout(()=>{s.textContent='✓ Aceptado';s.classList.add('ok')},560);setTimeout(nav,1250)}
-$('#main').onclick=e=>{const t=e.target.closest('[data-hm],[data-yr],[data-p],[data-bk],[data-ex],[data-go],[data-xa],[data-seg],[data-demo]');if(!t)return;const d=t.dataset;
+$('#main').onclick=e=>{const t=e.target.closest('[data-hm],[data-yr],[data-p],[data-bk],[data-ex],[data-go],[data-xa],[data-seg],[data-demo],[data-av]');if(!t)return;const d=t.dataset;
  if(d.hm){const v=d.hm;if(v==='-1'||v==='1'){let m=HM.m+ +v,y=HM.y;if(m<1){m=12;y--}if(m>12){m=1;y++}HM.m=m;HM.y=y}else if(v==='open'){HM.open=!HM.open;HM.py=HM.y}else if(v==='now'){HM={y:NY,m:NM,open:false,py:NY}}else if(v==='py-')HM.py--;else if(v==='py+')HM.py++;else if(v==='pick'){HM.y=HM.py;HM.m=+d.mo;HM.open=false}render()}
+ else if(d.av){AVM[tab]=d.av==='m'?'m':'y';HM.open=false;ST[tab]=[];if(d.av!=='m')YR[tab]=HM.y;render()}
  else if(d.go!==undefined)tap(t);
  else if(d.yr){YR[tab]+=+d.yr;render()}
  else if(d.bk!==undefined){ST[tab].pop();render()}
@@ -296,6 +360,17 @@ $('#main').onclick=e=>{const t=e.target.closest('[data-hm],[data-yr],[data-p],[d
  else if(d.xa)openExtra(d.xa,+d.y,+d.mo);
  else if(d.seg!==undefined)segSel(t);
  else if(d.demo){DEMO=d.demo==='on';applyData();refresh()}};
+// deslizar entre pantallas
+(function(){const ORD=[0,5,1,3,4];let x0,y0,t0,ok=false;const mn=document.getElementById('main');
+ const blocked=el=>{if(el.closest('.leaflet-container,input,textarea,select,.mp'))return true;
+  for(let n=el;n&&n!==mn;n=n.parentElement){if(n.scrollWidth>n.clientWidth+4&&/(auto|scroll)/.test(getComputedStyle(n).overflowX))return true}
+  return !!document.querySelector('.flow.show,.sheet.show,.login.show,#splash');};
+ mn.addEventListener('touchstart',e=>{if(e.touches.length!==1){ok=false;return}const t=e.touches[0];x0=t.clientX;y0=t.clientY;t0=Date.now();ok=!blocked(e.target)},{passive:true});
+ mn.addEventListener('touchend',e=>{if(!ok)return;ok=false;const t=e.changedTouches[0],dx=t.clientX-x0,dy=t.clientY-y0;
+  if(Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*1.6||Date.now()-t0>800)return;
+  const i=ORD.indexOf(tab),j=i+(dx<0?1:-1);if(j<0||j>=ORD.length)return;
+  tab=ORD[j];HM.open=false;render();mn.style.animation='none';void mn.offsetWidth;mn.style.animation=(dx<0?'slR':'slL')+' .28s ease-out'},{passive:true});
+})();
 // globo + avión que orbita
 let raf=[];
 function start(cv){

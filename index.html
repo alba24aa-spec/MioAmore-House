@@ -122,8 +122,16 @@ h3{font-size:16px;margin:22px 0 10px;font-weight:800}
 header{position:relative}
 .bn{display:flex;gap:10px;align-items:center;background:var(--sky);border-radius:18px;padding:12px 14px;margin-bottom:12px;font-size:13px;font-weight:600}.bn span{flex:1}.bn button{border:0;background:var(--butterd);color:#2F3B47;border-radius:12px;padding:9px 12px;font:700 13px system-ui;cursor:pointer;white-space:nowrap}
 .app{height:100vh;height:100dvh}.mc{z-index:1000}header{padding-top:max(10px,env(safe-area-inset-top))}.leaflet-container{font:inherit}
+.gear{position:absolute;right:8px;top:50%;margin-top:-22px;width:44px;height:44px;border:0;background:none;font-size:22px;cursor:pointer}
+.gear .sync{right:6px;top:6px;margin-top:0;border:2px solid var(--bg)}
+.login{position:absolute;inset:0;background:var(--bg);z-index:8;display:none;align-items:center;justify-content:center;padding:28px;overflow:auto}.login.show{display:flex}
+.login form{width:100%;max-width:340px;text-align:center}.login img{width:96px;height:96px;border-radius:22px}.login h2{margin:12px 0 18px;font-size:24px}.login input{margin-top:12px}
+textarea{width:100%;min-height:130px;font:500 13px ui-monospace,Menlo,monospace;padding:12px;border-radius:16px;border:1.5px solid var(--cs);background:var(--navbg);color:var(--ink);resize:vertical}
+.fl{display:block;margin-top:8px;font-size:14px}.sm{font-size:12px;opacity:.7;margin:6px 2px}
+.cols{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.cols span{background:var(--sky);border-radius:10px;padding:5px 9px;font-size:12px;font-weight:700}
+.sec{background:var(--sky);color:var(--ink)}
 </style></head><body><div class="app">
-<header><span class="sync" id="sync" data-s="loading"></span><img id="logo" src="icon-192.png" alt="Cookies & Milk"><b>Cookies & Milk 💰</b></header>
+<header><button class="gear" id="gear" aria-label="Ajustes">⚙️<span class="sync" id="sync" data-s="loading"></span></button><img id="logo" src="icon-192.png" alt="Cookies & Milk"><b>Cookies & Milk 💰</b></header>
 <main id="main"></main>
 <nav id="nav"></nav>
 <div class="sheet" id="sheet"><div>
@@ -131,6 +139,8 @@ header{position:relative}
 <button data-k="revolut" style="background:var(--char)">💳 Revolut</button>
 <button data-k="viajes" style="background:#63B5C6">✈️ Viajes</button></div></div>
 <div class="flow" id="flow"><div class="flagbg" id="fbg"></div><div class="ov" id="fov"></div><div class="fw" id="fw"></div></div><div class="toast" id="toast"></div>
+<div class="flow" id="setov"><div class="fw" id="setw"></div></div>
+<div class="login" id="login"><form id="lf"><img src="icon-192.png" alt=""><h2>Cookies &amp; Milk 💰</h2><input id="lem" type="email" name="email" autocomplete="username" placeholder="Correo electrónico" required><input id="lpw" type="password" name="password" autocomplete="current-password" placeholder="Contraseña" required><div class="err" id="lerr"></div><button class="save" type="submit" id="lbtn">ENTRAR</button></form></div>
 </div>
 <script>
 const $=s=>document.querySelector(s);
@@ -336,24 +346,29 @@ function demoData(){const D={E:[],trips:[],EX:[]};let n=0;const rnd=(a,b)=>{cons
 const DM=demoData();
 function applyData(){const s=DEMO?DM:REAL;E.length=0;E.push(...s.E);trips.length=0;trips.push(...s.trips);EX.length=0;EX.push(...s.EX)}
 function refresh(){const m=$('#main'),st=m.scrollTop;render();m.scrollTop=st}
-function setSync(s){SYNC=s;const d=$('#sync');d.dataset.s=s;d.title={ok:'Sincronizado con tus dispositivos',ro:'Solo lectura',err:'Error de sincronización',local:'Sin sincronizar',loading:'Conectando…'}[s];refresh()}
+function setSync(s){SYNC=s;const d=$('#sync');d.dataset.s=s;d.title={ok:'Sincronizado con la nube',ro:'Solo lectura',err:'Error de sincronización',local:'Sin nube: datos solo en este móvil',loading:'Conectando…',signedout:'Sin iniciar sesión'}[s];$('#login').classList.toggle('show',s==='signedout');refresh()}
 function banner(){if(DEMO)return `<div class="bn"><span>Modo ejemplo · no se guarda ni se sincroniza</span><button data-demo="off">Salir</button></div>`;
- if(SYNC==='ok'&&!E.length&&!trips.length)return `<div class="bn"><span>Aún no hay datos compartidos. Añade tu primer gasto con ＋ o mira cómo se ve con datos de ejemplo.</span><button data-demo="on">Ver ejemplo</button></div>`;
+ if(SYNC==='ok'&&!E.length&&!trips.length)return `<div class="bn"><span>Aún no hay datos compartidos. Añade tu primer gasto con ＋, importa tus datos antiguos desde ⚙️ o mira cómo se ve con datos de ejemplo.</span><button data-demo="on">Ver ejemplo</button></div>`;
  if(SYNC==='ro')return `<div class="bn"><span>Solo lectura: puedes ver los datos pero no cambiarlos.</span></div>`;
  if(SYNC==='local'){const has=E.length||trips.length;return `<div class="bn"><span>${has?'Los datos se guardan solo en este dispositivo.':'Aún no hay datos. Añade tu primer gasto con ＋ o mira cómo se ve con datos de ejemplo.'}</span>${has?'':'<button data-demo="on">Ver ejemplo</button>'}</div>`}
- if(SYNC==='err')return `<div class="bn"><span>No se pudo sincronizar. Revisa tu conexión.</span></div>`;return ''}
+ if(SYNC==='err')return `<div class="bn"><span>No se pudo sincronizar. Revisa la conexión y que tu correo esté autorizado en las reglas de Firebase.</span></div>`;return ''}
 function persist(){if(DEMO)return;try{localStorage.setItem('cm_data',JSON.stringify(REAL))}catch(e){}}
 function loadLocal(){try{const s=JSON.parse(localStorage.getItem('cm_data')||'null');if(s){REAL.E=s.E||[];REAL.trips=s.trips||[];REAL.EX=s.EX||[]}}catch(e){}}
 async function saveDoc(k,o){if(!CAN){toast('Solo lectura');return}
- if(DB&&!DEMO){try{await DB.doc(COLN[k]+'/'+o.id).set(o)}catch(e){toast('No se pudo guardar ('+(e.code||'error')+')')}}
+ if(DB&&!DEMO){if(!FBU){toast('Inicia sesión primero');return}try{await DB.set(COLN[k],o)}catch(e){toast('No se pudo guardar ('+(e.code||'error')+')')}}
  else{const a=(DEMO?DM:REAL)[k],i=a.findIndex(x=>x.id===o.id);i<0?a.push(o):a[i]=o;persist();applyData();refresh()}}
 async function delDoc(k,id){if(!CAN){toast('Solo lectura');return}
- if(DB&&!DEMO){try{await DB.doc(COLN[k]+'/'+id).delete()}catch(e){toast('No se pudo eliminar')}}
+ if(DB&&!DEMO){if(!FBU){toast('Inicia sesión primero');return}try{await DB.del(COLN[k],id)}catch(e){toast('No se pudo eliminar')}}
  else{const a=(DEMO?DM:REAL)[k],i=a.findIndex(x=>x.id===id);if(i>=0)a.splice(i,1);persist();applyData();refresh()}}
-async function initSync(){try{if(!window.claude||!claude.use){loadLocal();applyData();return setSync('local')}
- const[db,user]=await Promise.all([claude.use('db'),claude.use('user')]);if(!db)return setSync('local');
- DB=db;CAN=user?user.can('data.write')!==false:true;const got=new Set();
- for(const k of['E','trips','EX'])db.collection(COLN[k]).onSnapshot(s=>{REAL[k]=s.docs.map(d=>d.data());got.add(k);applyData();if(got.size===3)setSync(CAN?'ok':'ro');else refresh()},()=>setSync('err'))}catch(e){setSync('local')}}
+let FBU=null,UNS=[];
+async function initSync(){
+ if(!window.CMFB&&!window.CMFB_ERR){await new Promise(r=>{window.addEventListener('cmfb',r,{once:true});setTimeout(r,9000)})}
+ if(!window.CMFB){loadLocal();applyData();return setSync('local')}
+ DB=window.CMFB;
+ DB.onAuth(u=>{FBU=u;UNS.forEach(f=>{try{f()}catch(e){}});UNS=[];
+  if(!u){REAL.E=[];REAL.trips=[];REAL.EX=[];applyData();return setSync('signedout')}
+  const got=new Set();setSync('loading');
+  for(const k of['E','trips','EX'])UNS.push(DB.listen(COLN[k],a=>{REAL[k]=a;got.add(k);applyData();if(got.size===3)setSync('ok');else refresh()},()=>setSync('err')))})}
 const CATS={naranja:[['🏠','Alquiler'],['🚿','Agua y Calefacción'],['⚡','Octopus'],['🚗','Garaje'],['🏋️','GoFit'],['🛋️','Ikea Visa'],['📱','DiGi'],['📦','Otros']],
 revolut:[['🛒','Alimentación'],['💪','Grow Nutrition'],['🐾','Sirius y Bruma'],['🍽️','Restaurantes'],['🥂','Vermutinos'],['🎉','Eventos'],['💊','Farmacia'],['🛍️','Otras compras']]};
 const TC=[['🏨','Hotel'],['🚗','Desplazamiento'],['🎟️','Entradas'],['🍽️','Comer'],['☕','Desayunar'],['🍴','Cenar'],['🍹','Tomar algo'],['🛍️','Otros']];
@@ -424,6 +439,123 @@ fw.oninput=e=>{if(e.target.id!=='lug')return;const v=e.target.value,q=norm(v.tri
  const r=q?P.map((p,i)=>[p,i]).filter(([p])=>norm(p[0]).includes(q)).sort((a,b)=>(norm(b[0][0]).startsWith(q))-(norm(a[0][0]).startsWith(q))).slice(0,6):[];
  $('#sug').innerHTML=r.map(([p,i])=>`<button data-a="sel" data-i="${i}">${fl(p[1])}<b>${p[0]}</b><small>${p[3]} · ${p[2]}</small></button>`).join('')};
 $('#sheet').onclick=e=>{const k=e.target.closest('[data-k]');if(k)openFlow(k.dataset.k);else if(e.target.id==='sheet')$('#sheet').classList.remove('show')};
+
+// ===== acceso, ajustes e importación =====
+const escH=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+$('#lf').onsubmit=async e=>{e.preventDefault();const b=$('#lbtn'),er=$('#lerr');er.textContent='';b.disabled=true;b.textContent='Entrando…';
+ try{await DB.signIn($('#lem').value.trim(),$('#lpw').value)}catch(x){const c=x&&x.code||'';er.textContent=/network/.test(c)?'Sin conexión. Inténtalo de nuevo.':/too-many/.test(c)?'Demasiados intentos. Espera un momento.':'Correo o contraseña incorrectos'}
+ b.disabled=false;b.textContent='ENTRAR'};
+const setw=$('#setw');let SV={step:'main',text:''};
+function openSet(){SV={step:'main',text:SV.text||''};$('#setov').classList.add('show');drawSet()}
+function closeSet(){$('#setov').classList.remove('show');refresh()}
+$('#gear').onclick=openSet;
+const shdr=(t,b)=>`<div class="fh"><button class="back" data-s="${b||'close'}" aria-label="Atrás">←</button>${t}</div>`;
+function localData(){try{return JSON.parse(localStorage.getItem('cm_data')||'null')}catch(e){return null}}
+function localCount(){const s=localData();return s?(s.E||[]).length+(s.trips||[]).length+(s.EX||[]).length:0}
+const COLS=['Fecha','Cuenta','Categoría','Importe','Observaciones','Viaje','Ida','Vuelta'];
+const TPL=[COLS,['05/01/2026','Naranja','Alquiler','650','',' ','',''],['12/01/2026','Revolut','Alimentación','84,30','Compra semanal','','',''],['02/2026','Naranja','GoFit','39','Solo mes','','',''],['14/05/2026','Naranja','Hotel','340','','Lisboa','14/05/2026','17/05/2026'],['15/05/2026','Alba','Comer','45,50','','Lisboa','14/05/2026','17/05/2026']].map(r=>r.map(x=>x.trim()));
+function drawSet(){let h='';const st=SV.step;
+ if(st==='main'){const t={ok:'🟢 Sincronizado con la nube',loading:'⚪ Conectando…',err:'🔴 Error de sincronización',local:'⚪ Sin nube: datos solo en este móvil',signedout:'⚪ Sin iniciar sesión'}[SYNC]||'';
+  h=shdr('Ajustes')+`<div class="fb"><div class="det"><div><small>Estado</small><b>${t}</b></div>${FBU?`<div><small>Sesión</small><b>${escH(FBU.email||'')}</b></div>`:''}</div>`+
+   (SYNC==='ok'&&localCount()?`<div class="bn" style="margin-top:14px"><span>Hay ${localCount()} datos guardados solo en este móvil.</span><button data-s="up">Subir a la nube</button></div>`:'')+
+   `<button class="save" data-s="imp">Importar datos antiguos</button>`+(FBU?`<button class="save sec" data-s="out">Cerrar sesión</button>`:'')+`</div>`}
+ if(st==='imp'){h=shdr('Importar datos antiguos','main')+`<div class="fb"><p class="hint">Pega aquí las filas copiadas de Excel (con la cabecera) o elige un archivo CSV. Antes de guardar nada verás un resumen.</p><div class="lbl">Columnas</div><div class="cols">${COLS.map(c=>`<span>${c}</span>`).join('')}</div>
+   <p class="sm">Fecha: 25/12/2025 o solo mes (12/2025). Cuenta: Naranja o Revolut (para viajes también Alba o David). Importe: 84,30. Viaje, Ida y Vuelta solo se rellenan en gastos de viaje: la categoría es entonces Hotel, Comer, etc.</p>
+   <button class="save sec" style="margin-top:8px" data-s="tpl">Copiar plantilla (para pegar en Excel)</button><button class="save sec" style="margin-top:8px" data-s="dl">Descargar plantilla CSV</button>
+   <div class="lbl">Archivo CSV</div><input class="fl" type="file" id="ifl" accept=".csv,.tsv,.txt,text/csv,text/plain"><div class="lbl">…o pega aquí</div><textarea id="itx" placeholder="Fecha;Cuenta;Categoría;Importe;…">${escH(SV.text||'')}</textarea><button class="save" data-s="rev">REVISAR</button></div>`}
+ if(st==='rev'){const r=SV.res;h=shdr('Resumen de la importación','imp')+`<div class="fb"><div class="det"><div><small>Gastos de casa</small><b>${r.nCasa}</b></div><div><small>Gastos de viaje</small><b>${r.nViaje}</b></div><div><small>Viajes nuevos</small><b>${r.nTrips}</b></div><div><small>Importe total</small><b>${fmt(r.total)}</b></div></div>`+
+   (r.errs.length?`<h3>${r.errs.length} fila${r.errs.length>1?'s':''} con problemas (no se importarán)</h3><div class="det">${r.errs.slice(0,15).map(x=>`<div><small>Fila ${x[0]}</small>${escH(x[1])}</div>`).join('')}</div>${r.errs.length>15?`<p class="sm">…y ${r.errs.length-15} más.</p>`:''}`:'')+
+   (r.items.length?`<button class="save" data-s="run">IMPORTAR ${r.nCasa+r.nViaje} GASTOS</button>`:'<p class="hint" style="margin-top:14px">No hay ninguna fila válida que importar.</p>')+`<p class="sm">Si vuelves a importar el mismo archivo no se duplican los gastos.</p></div>`}
+ setw.innerHTML=h;setw.scrollTop=0}
+function csvRows(txt){txt=txt.replace(/^﻿/,'').replace(/\r\n?/g,'\n');const l0=txt.split('\n')[0]||'';
+ const nc=(l0.match(/;/g)||[]).length,nm=(l0.match(/,/g)||[]).length,d=l0.includes('\t')?'\t':(nc>0&&nc>=nm?';':',');
+ const rows=[];let r=[],c='',q=false;
+ for(let i=0;i<txt.length;i++){const ch=txt[i];
+  if(q){if(ch==='"'){if(txt[i+1]==='"'){c+='"';i++}else q=false}else c+=ch}
+  else if(ch==='"')q=true;else if(ch===d){r.push(c);c=''}else if(ch==='\n'){r.push(c);rows.push(r);r=[];c=''}else c+=ch}
+ r.push(c);rows.push(r);return rows.map(x=>x.map(s=>s.trim()))}
+const okd=(y,mo,d)=>{const t=new Date(y,mo-1,d);return y>=2000&&y<=2100&&t.getFullYear()===y&&t.getMonth()===mo-1&&t.getDate()===d?{d:`${y}-${pad(mo)}-${pad(d)}`,m:`${y}-${pad(mo)}`}:null};
+const okm=(y,mo)=>mo>=1&&mo<=12&&y>=2000&&y<=2100?{d:null,m:`${y}-${pad(mo)}`}:null;
+function pdate(s){let m;s=(s||'').trim();
+ if(m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))return okd(+m[1],+m[2],+m[3]);
+ if(m=s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})$/)){let y=+m[3];if(y<100)y+=2000;return okd(y,+m[2],+m[1])}
+ if(m=s.match(/^(\d{4})-(\d{1,2})$/))return okm(+m[1],+m[2]);
+ if(m=s.match(/^(\d{1,2})[\/\-.](\d{4})$/))return okm(+m[2],+m[1]);return null}
+function pamt(s){s=(s||'').replace(/[€\s]/g,'');if(!s)return NaN;
+ if(s.includes(',')&&s.includes('.'))s=s.replace(/\./g,'').replace(',','.');else if(s.includes(','))s=s.replace(',','.');else if(/^\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'');
+ return /^\d+(\.\d+)?$/.test(s)?Math.round(parseFloat(s)*100)/100:NaN}
+function h53(s){let a=0xdeadbeef,b=0x41c6ce57;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,2654435761);b=Math.imul(b^c,1597334677)}a=Math.imul(a^(a>>>16),2246822507)^Math.imul(b^(b>>>13),3266489909);b=Math.imul(b^(b>>>16),2246822507)^Math.imul(a^(a>>>13),3266489909);return (4294967296*(2097151&b)+(a>>>0)).toString(36)}
+const HK={fecha:['fecha','dia','date'],cuenta:['cuenta','asignacion','cuentaasignacion','correspondea','pagadocon','pagado'],cat:['categoria','categorias','tipo'],imp:['importe','cantidad','total','euros','precio'],obs:['observaciones','observacion','notas','nota','concepto','comentario','descripcion'],viaje:['viaje','destino'],ida:['ida','inicio','desde','fechaida'],vuelta:['vuelta','fin','hasta','fechavuelta']};
+function parseImport(txt){const all=csvRows(txt),res={items:[],errs:[],nCasa:0,nViaje:0,nTrips:0,total:0};
+ let hi=all.findIndex(r=>r.some(x=>x));if(hi<0){res.errs.push([1,'No hay datos']);return res}
+ const col={};all[hi].forEach((x,i)=>{const k=norm(x).replace(/[^a-z]/g,'');for(const f in HK)if(HK[f].includes(k)&&col[f]===undefined)col[f]=i});
+ for(const f of['fecha','cuenta','cat','imp'])if(col[f]===undefined){res.errs.push([hi+1,'Falta la columna '+({fecha:'Fecha',cuenta:'Cuenta',cat:'Categoría',imp:'Importe'}[f])+' en la cabecera']);return res}
+ const g=(r,f)=>col[f]===undefined?'':(r[col[f]]||''),nw={},occ={},exp=[],ACC=['Naranja','Revolut','Alba','David'];
+ for(let i=hi+1;i<all.length;i++){const r=all[i];if(!r.some(x=>x))continue;const n=i+1;
+  const fe=pdate(g(r,'fecha'));if(!fe){res.errs.push([n,'Fecha no válida: «'+g(r,'fecha')+'»']);continue}
+  const am=pamt(g(r,'imp'));if(!(am>0)){res.errs.push([n,'Importe no válido: «'+g(r,'imp')+'»']);continue}
+  const cu=ACC.find(a=>norm(a)===norm(g(r,'cuenta')));if(!cu){res.errs.push([n,'Cuenta no válida: «'+g(r,'cuenta')+'» (usa Naranja, Revolut, Alba o David)']);continue}
+  const obs0=g(r,'obs'),obs=obs0,via=g(r,'viaje'),cn=norm(g(r,'cat')).replace(/[^a-z ]/g,'').trim();
+  if(!via){
+   if(cu==='Alba'||cu==='David'){res.errs.push([n,cu+' solo se usa en gastos de viaje: rellena la columna Viaje']);continue}
+   const L=CATS[cu.toLowerCase()];let c=L.find(x=>norm(x[1])===cn),obs=obs0;if(!c){c=L[L.length-1];obs=(obs0?obs0+' · ':'')+'['+(g(r,'cat')||'sin categoría')+']'}
+   const sig=JSON.stringify(['c',cu,c[1],am,fe.d||fe.m,obs]);occ[sig]=(occ[sig]||0)+1;
+   exp.push({id:'i'+h53(sig+'#'+occ[sig]),kind:'casa',acc:cu,cat:c[1],amt:am,d:fe.d,m:fe.m,obs});res.nCasa++}
+  else{
+   let tc=TC.find(x=>norm(x[1])===cn),obs=obs0;if(!tc){tc=TC[TC.length-1];obs=(obs0?obs0+' · ':'')+'['+(g(r,'cat')||'sin categoría')+']'}
+   const pn=norm(via),pl=P.find(p=>norm(p[0])===pn),ex=trips.filter(t=>norm(t.place)===pn);
+   if(!pl&&!ex.length){res.errs.push([n,'Lugar «'+via+'» no reconocido (usa una ciudad, provincia o país de la lista, p. ej. Lisboa)']);continue}
+   const ida=g(r,'ida')?pdate(g(r,'ida')):null,vue=g(r,'vuelta')?pdate(g(r,'vuelta')):null;
+   if((g(r,'ida')&&!(ida&&ida.d))||(g(r,'vuelta')&&!(vue&&vue.d))){res.errs.push([n,'Fechas de ida/vuelta no válidas']);continue}
+   let tid=null;
+   if(ida&&vue){const e1=ex.find(t=>t.from===ida.d&&t.to===vue.d);if(e1)tid=e1.id;else{const k=pn+'|'+ida.d+'|'+vue.d;tid='it'+h53(k);nw[tid]=nw[tid]||{id:tid,place:pl[0],iso:pl[1],country:pl[2],from:ida.d,to:vue.d,ds:[]}}}
+   else{const e1=fe.d&&ex.find(t=>t.from<=fe.d&&fe.d<=t.to);if(e1)tid=e1.id;else{if(!pl){res.errs.push([n,'Ese gasto no cae en las fechas de ningún viaje existente a «'+via+'»: indica Ida y Vuelta']);continue}tid='it'+h53(pn+'|');nw[tid]=nw[tid]||{id:tid,place:pl[0],iso:pl[1],country:pl[2],from:null,to:null,ds:[]}}}
+   if(nw[tid])nw[tid].ds.push(fe.d||fe.m+'-01');
+   const cat=tc[0]+' '+tc[1],sig=JSON.stringify(['v',tid,cu,cat,am,fe.d||fe.m,obs]);occ[sig]=(occ[sig]||0)+1;
+   exp.push({id:'i'+h53(sig+'#'+occ[sig]),kind:'trip',trip:tid,cat,to:cu,amt:am,d:fe.d,m:fe.m,obs});res.nViaje++}
+  res.total+=am}
+ for(const t of Object.values(nw)){if(!t.from){const s=[...t.ds].sort();t.from=s[0];t.to=s[s.length-1]}delete t.ds;res.items.push(['trips',t]);res.nTrips++}
+ exp.forEach(e=>res.items.push(['expenses',e]));return res}
+async function readFileText(f){const b=await f.arrayBuffer();try{return new TextDecoder('utf-8',{fatal:true}).decode(b)}catch(e){return new TextDecoder('windows-1252').decode(b)}}
+async function putItems(items){if(DB&&FBU){await DB.batch(items)}else{items.forEach(([c,o])=>{const k=Object.keys(COLN).find(x=>COLN[x]===c),a=REAL[k],i=a.findIndex(x=>x.id===o.id);i<0?a.push(o):a[i]=o});persist()}applyData();refresh()}
+const tplText=sep=>TPL.map(r=>r.join(sep)).join('\n');
+setw.oninput=e=>{if(e.target.id==='itx')SV.text=e.target.value};
+setw.onchange=async e=>{if(e.target.id==='ifl'&&e.target.files[0]){SV.text=await readFileText(e.target.files[0]);const t=$('#itx');if(t)t.value=SV.text;toast('Archivo cargado: pulsa REVISAR')}};
+setw.onclick=async e=>{const b=e.target.closest('[data-s]');if(!b)return;const a=b.dataset.s;
+ if(a==='close')closeSet();else if(a==='main'){SV.step='main';drawSet()}else if(a==='imp'){SV.step='imp';drawSet()}
+ else if(a==='out'){await DB.signOut();closeSet()}
+ else if(a==='tpl'){try{await navigator.clipboard.writeText(tplText('\t'));toast('Plantilla copiada: pégala en Excel')}catch(x){SV.text=tplText(';');drawSet();toast('Plantilla puesta en el cuadro de texto')}}
+ else if(a==='dl'){const u=URL.createObjectURL(new Blob(['﻿'+tplText(';')],{type:'text/csv;charset=utf-8'})),l=document.createElement('a');l.href=u;l.download='plantilla-cookies-milk.csv';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}
+ else if(a==='rev'){const t=($('#itx').value||'').trim();SV.text=t;if(!t)return toast('Pega las filas o elige un archivo');SV.res=parseImport(t);SV.step='rev';drawSet()}
+ else if(a==='run'){if(DEMO)return toast('Sal antes del modo ejemplo');b.disabled=true;b.textContent='Importando…';
+  try{await putItems(SV.res.items);const n=SV.res.nCasa+SV.res.nViaje;SV.text='';toast(n+' gastos importados ✓');closeSet()}catch(x){b.disabled=false;b.textContent='IMPORTAR';toast('No se pudo importar ('+(x.code||'error')+')')}}
+ else if(a==='up'){const s=localData();if(!s)return;const it=[];(s.trips||[]).forEach(o=>it.push(['trips',o]));(s.E||[]).forEach(o=>it.push(['expenses',o]));(s.EX||[]).forEach(o=>it.push(['extras',o]));
+  b.disabled=true;try{await DB.batch(it);localStorage.removeItem('cm_data');toast('Datos subidos a la nube ✓');drawSet()}catch(x){b.disabled=false;toast('No se pudo subir ('+(x.code||'error')+')')}}};
+
 applyData();render();initSync();
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
-</script></body></html>
+</script><script type="module">
+const cfg={apiKey:"AIzaSyBNhkWccqkiGwX65rHodkX3FRrQA7zamdg",authDomain:"cookies-money.firebaseapp.com",projectId:"cookies-money",storageBucket:"cookies-money.firebasestorage.app",messagingSenderId:"396177581568",appId:"1:396177581568:web:d02ca6c0d461e4f5135ae5"};
+(async()=>{
+ if(!window.CMFB){
+  try{
+   const B='https://www.gstatic.com/firebasejs/10.14.1/';
+   const[A,Au,F]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js')]);
+   const app=A.initializeApp(cfg),auth=Au.getAuth(app);
+   let db;try{db=F.initializeFirestore(app,{localCache:F.persistentLocalCache({tabManager:F.persistentMultipleTabManager()})})}catch(e){db=F.getFirestore(app)}
+   const clean=o=>JSON.parse(JSON.stringify(o));
+   window.CMFB={
+    onAuth:cb=>Au.onAuthStateChanged(auth,cb),
+    signIn:(e,p)=>Au.signInWithEmailAndPassword(auth,e,p),
+    signOut:()=>Au.signOut(auth),
+    listen:(col,ok,err)=>F.onSnapshot(F.collection(db,col),s=>ok(s.docs.map(d=>d.data())),err),
+    set:(col,o)=>F.setDoc(F.doc(db,col,o.id),clean(o)),
+    del:(col,id)=>F.deleteDoc(F.doc(db,col,id)),
+    batch:async items=>{for(let i=0;i<items.length;i+=400){const b=F.writeBatch(db);items.slice(i,i+400).forEach(([c,o])=>b.set(F.doc(db,c,o.id),clean(o)));await b.commit()}}
+   };
+  }catch(e){console.error(e);window.CMFB_ERR=true}
+ }
+ window.dispatchEvent(new Event('cmfb'));
+})();
+</script>
+</body></html>

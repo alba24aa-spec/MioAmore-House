@@ -4,7 +4,18 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="theme-color" content="#8FBEDC">
+<link rel="apple-touch-startup-image" media="(device-width:375px) and (device-height:667px) and (-webkit-device-pixel-ratio:2) and (orientation:portrait)" href="su-750x1334.jpg">
+<link rel="apple-touch-startup-image" media="(device-width:414px) and (device-height:896px) and (-webkit-device-pixel-ratio:2) and (orientation:portrait)" href="su-828x1792.jpg">
+<link rel="apple-touch-startup-image" media="(device-width:375px) and (device-height:812px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)" href="su-1125x2436.jpg">
+<link rel="apple-touch-startup-image" media="(device-width:414px) and (device-height:736px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)" href="su-1242x2208.jpg">
+<link rel="apple-touch-startup-image" media="(device-width:414px) and (device-height:896px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)" href="su-1242x2688.jpg">
+<link rel="apple-touch-startup-image" media="(device-width:390px) and (device-height:844px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)" href="su-1170x2532.jpg">
+<link rel="apple-touch-startup-image" media="(device-width:428px) and (device-height:926px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)" href="su-1284x2778.jpg">
+<link rel="apple-touch-startup-image" media="(device-width:393px) and (device-height:852px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)" href="su-1179x2556.jpg">
+<link rel="apple-touch-startup-image" media="(device-width:430px) and (device-height:932px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)" href="su-1290x2796.jpg">
+<link rel="apple-touch-startup-image" media="(device-width:402px) and (device-height:874px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)" href="su-1206x2622.jpg">
+<link rel="apple-touch-startup-image" media="(device-width:440px) and (device-height:956px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)" href="su-1320x2868.jpg">
+<meta name="theme-color" content="#EAF3F8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Cookies & Milk">
@@ -132,65 +143,26 @@ textarea{width:100%;min-height:130px;font:500 13px ui-monospace,Menlo,monospace;
 .sec{background:var(--sky);color:var(--ink)}
 
 
-#splash{position:fixed;inset:0;z-index:6000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(#CFE5F3,#FCF9EF 78%);transition:opacity .45s;overflow:hidden;cursor:pointer}
+html{background:#EAF3F8}
+#splash{position:fixed;inset:0;z-index:6000;background:#EAF3F8;overflow:hidden;transition:opacity .5s;cursor:pointer;--k:calc(min(100vw,480px)*0.00234)}
 #splash.out{opacity:0;pointer-events:none}
-#splash svg{width:min(100vw,520px);height:auto;overflow:visible;animation:sppop .6s cubic-bezier(.2,1.4,.4,1) both}
-#splash .t{font:800 26px system-ui,sans-serif;color:#3C4B58;margin-top:4px;animation:spin .8s .3s both}
-#splash small{font:600 12px system-ui,sans-serif;color:#6b7c88;margin-top:6px;opacity:.7}
-@keyframes sppop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
-@keyframes spin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-#splash svg *{animation-duration:6.6s;animation-timing-function:ease-in-out;animation-fill-mode:both;animation-iteration-count:1}
-.lidc{animation-name:lidc}
-@keyframes lidc{0%,8%{transform:translate(0,0) rotate(0)}20%{transform:translate(0,-260px) rotate(0)}34%{transform:translate(-330px,-340px) rotate(-14deg)}50%{transform:translate(-330px,-350px) rotate(-17deg)}64%{transform:translate(-330px,-340px) rotate(-14deg)}76%{transform:translate(-90px,-300px) rotate(-5deg)}82%{transform:translate(0,-70px) rotate(0)}85%{transform:translate(0,0) rotate(0)}87%{transform:translate(0,6px)}89%,100%{transform:translate(0,0)}}
-.lha{animation-name:lha}
-@keyframes lha{0%{transform:translate(0,1800px)}8%,84%{transform:translate(0,0)}96%,100%{transform:translate(0,1800px)}}
-.lfist{animation-name:lfist}.lopen{animation-name:lopen}
-@keyframes lfist{0%,84.9%{opacity:1}85%,100%{opacity:0}}
-@keyframes lopen{0%,84.9%{opacity:0}85%,100%{opacity:1}}
-.rh{animation-name:rh;transform:translate(1619px,1959px) rotate(-22deg)}
-@keyframes rh{0%{transform:translate(1619px,1959px) rotate(-22deg)}8%{transform:translate(944px,290px) rotate(-22deg)}20%{transform:translate(944px,30px) rotate(-22deg)}25%{transform:translate(1130px,-70px) rotate(-35deg)}35%{transform:translate(694px,-170px) rotate(215deg)}44%,46%{transform:translate(694px,232px) rotate(215deg)}58%{transform:translate(694px,-328px) rotate(215deg)}61%{transform:translate(694px,-343px) rotate(215deg)}64%{transform:translate(694px,-328px) rotate(215deg)}80%,100%{transform:translate(1594px,-2328px) rotate(215deg)}}
-.rfist{animation-name:rfist}.ropen{animation-name:ropen}
-@keyframes rfist{0%,21.9%{opacity:1}22%,44.9%{opacity:0}45%,100%{opacity:1}}
-@keyframes ropen{0%,21.9%{opacity:0}22%,44.9%{opacity:1}45%,100%{opacity:0}}
-.bill{animation-name:bill}
-@keyframes bill{0%,46%{transform:translate(0,0)}58%{transform:translate(0,-560px)}61%{transform:translate(0,-575px)}64%{transform:translate(0,-560px)}80%,100%{transform:translate(900px,-2560px)}}
-.spk{animation-name:spk;transform:scale(0)}
-@keyframes spk{0%,86%{transform:scale(0) rotate(0)}91%{transform:scale(1) rotate(40deg)}97%,100%{transform:scale(0) rotate(90deg)}}
-@media (prefers-reduced-motion:reduce){#splash svg *{animation:none!important}}
+#splash .st{position:absolute;left:50%;top:calc(50% - 371*var(--k));width:calc(720*var(--k));height:calc(900*var(--k));transform:translateX(-50%)}
+#splash img{position:absolute;left:0;top:0;width:100%;height:100%;display:block;opacity:0;-webkit-user-drag:none;user-select:none}
+#splash img:first-child{opacity:1}
+#splash small{position:absolute;bottom:max(18px,env(safe-area-inset-bottom));left:0;right:0;text-align:center;font:600 12px system-ui,sans-serif;color:#6b7c88;opacity:.7}
+
 
 .yb{width:100%;margin-top:10px;border:0;border-radius:16px;background:var(--sun,#FFE49A);color:var(--ink);font:700 15px system-ui;padding:12px;cursor:pointer}
 @keyframes slR{from{transform:translateX(38px);opacity:.2}to{transform:none;opacity:1}}@keyframes slL{from{transform:translateX(-38px);opacity:.2}to{transform:none;opacity:1}}
-</style></head><body><div id="splash" aria-label="Cargando Cookies &amp; Milk"><svg viewBox="-140 -640 1534 1894" xmlns="http://www.w3.org/2000/svg" role="img">
-<defs>
-<linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE0C4"/><stop offset="1" stop-color="#F7B994"/></linearGradient>
-<linearGradient id="slv" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B5D8EE"/><stop offset="1" stop-color="#7FB1D3"/></linearGradient>
-<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C8EBB9"/><stop offset="1" stop-color="#86C98A"/></linearGradient>
-<clipPath id="slot"><rect x="-1000" y="-3000" width="4000" height="3345"/></clipPath>
-<g id="HO"><g stroke-linecap="round" fill="none"><path d="M-72 -40 Q-130 -70 -140 -140" stroke="#E39A74" stroke-width="62"/><path d="M-72 -40 Q-130 -70 -140 -140" stroke="url(#skin)" stroke-width="50"/><path d="M-66 -120 L-74 -215" stroke="#E39A74" stroke-width="54"/><path d="M-22 -120 L-24 -242" stroke="#E39A74" stroke-width="54"/><path d="M22 -120 L26 -232" stroke="#E39A74" stroke-width="54"/><path d="M66 -120 L76 -206" stroke="#E39A74" stroke-width="54"/><path d="M-66 -120 L-74 -215" stroke="url(#skin)" stroke-width="42"/><path d="M-22 -120 L-24 -242" stroke="url(#skin)" stroke-width="42"/><path d="M22 -120 L26 -232" stroke="url(#skin)" stroke-width="42"/><path d="M66 -120 L76 -206" stroke="url(#skin)" stroke-width="42"/></g><rect x="-92" y="-195" width="184" height="222" rx="72" fill="url(#skin)" stroke="#E39A74" stroke-width="6"/><ellipse cx="-34" cy="-130" rx="30" ry="46" fill="#fff" opacity=".28"/><ellipse cx="-66" cy="-232" rx="9" ry="16" fill="#fff" opacity=".4"/><ellipse cx="-22" cy="-250" rx="9" ry="16" fill="#fff" opacity=".4"/><rect x="-80" y="18" width="160" height="2000" fill="url(#slv)"/><path d="M-50 100 L-50 2000 M26 100 L26 2000" stroke="#fff" stroke-opacity=".18" stroke-width="12"/><rect x="-92" y="-4" width="184" height="66" rx="24" fill="#FFF3D6" stroke="#E5D3A0" stroke-width="5"/></g><g id="HF"><rect x="-94" y="-218" width="188" height="246" rx="80" fill="url(#skin)" stroke="#E39A74" stroke-width="6"/><g stroke="#E39A74" stroke-width="6" stroke-linecap="round" fill="none"><path d="M-47 -205 L-47 -140"/><path d="M0 -212 L0 -138"/><path d="M47 -205 L47 -140"/></g><ellipse cx="-68" cy="-182" rx="12" ry="18" fill="#fff" opacity=".38"/><ellipse cx="-22" cy="-190" rx="12" ry="18" fill="#fff" opacity=".38"/><ellipse cx="26" cy="-190" rx="12" ry="18" fill="#fff" opacity=".3"/><path d="M-76 -62 Q-30 -125 38 -108" fill="none" stroke="#E39A74" stroke-width="62" stroke-linecap="round"/><path d="M-76 -62 Q-30 -125 38 -108" fill="none" stroke="url(#skin)" stroke-width="50" stroke-linecap="round"/><ellipse cx="-30" cy="-98" rx="14" ry="8" fill="#fff" opacity=".4"/><rect x="-80" y="18" width="160" height="2000" fill="url(#slv)"/><path d="M-50 100 L-50 2000 M26 100 L26 2000" stroke="#fff" stroke-opacity=".18" stroke-width="12"/><rect x="-92" y="-4" width="184" height="66" rx="24" fill="#FFF3D6" stroke="#E5D3A0" stroke-width="5"/></g>
-
-</defs>
-<ellipse cx="627" cy="1235" rx="330" ry="34" fill="#3C4B58" opacity=".12"/>
-<image href="jar-body.webp" x="0" y="0" width="1254" height="1254"/>
-<g clip-path="url(#slot)"><g class="bill">
- <rect x="530" y="345" width="190" height="400" rx="14" fill="url(#bg)" stroke="#5FA867" stroke-width="7"/>
- <rect x="546" y="361" width="158" height="368" rx="8" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="4"/>
- <circle cx="625" cy="470" r="46" fill="#fff" fill-opacity=".55" stroke="#5FA867" stroke-width="5"/>
- <text x="625" y="488" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="56" fill="#3F8A4C">€</text>
- <text x="625" y="620" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="76" fill="#3F8A4C">20</text>
- <path d="M560 680 H690 M560 700 H690" stroke="#5FA867" stroke-width="6" stroke-linecap="round"/>
-</g></g>
-<g transform="translate(625 112)"><g class="lidc"><g transform="translate(-625 -112)">
- <image href="jar-lid.webp" x="322" y="0" width="606" height="224"/>
- <g transform="translate(310 290) rotate(22)"><g class="lha"><g class="lfist"><use href="#HF"/></g><g class="lopen"><use href="#HO"/></g></g></g>
-</g></g></g>
-<g class="rh"><g transform="scale(-1 1)"><g class="rfist"><use href="#HF"/></g><g class="ropen"><use href="#HO"/></g></g></g>
-<g transform="translate(300 360)"><path class="spk" style="animation-delay:0s" d="M0 -46 Q7 -7 46 0 Q7 7 0 46 Q-7 7 -46 0 Q-7 -7 0 -46Z" fill="#FFD84D" stroke="#fff" stroke-width="5"/></g>
-<g transform="translate(960 300) scale(.7)"><path class="spk" style="animation-delay:.12s" d="M0 -46 Q7 -7 46 0 Q7 7 0 46 Q-7 7 -46 0 Q-7 -7 0 -46Z" fill="#FFD84D" stroke="#fff" stroke-width="5"/></g>
-<g transform="translate(1010 760) scale(.55)"><path class="spk" style="animation-delay:.2s" d="M0 -46 Q7 -7 46 0 Q7 7 0 46 Q-7 7 -46 0 Q-7 -7 0 -46Z" fill="#FFD84D" stroke="#fff" stroke-width="5"/></g>
-<g transform="translate(260 800) scale(.5)"><path class="spk" style="animation-delay:.08s" d="M0 -46 Q7 -7 46 0 Q7 7 0 46 Q-7 7 -46 0 Q-7 -7 0 -46Z" fill="#FFD84D" stroke="#fff" stroke-width="5"/></g>
-</svg><div class="t">Cookies &amp; Milk 💰</div><small>Toca para saltar</small></div>
-<script>(function(){var sp=document.getElementById('splash');if(!sp)return;var g=0;function hide(){if(g)return;g=1;sp.classList.add('out');setTimeout(function(){sp.remove()},500)}
-sp.addEventListener('click',hide);var l=sp.querySelector('.lidc');l&&l.addEventListener('animationend',function(){setTimeout(hide,800)});setTimeout(hide,8600);if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)setTimeout(hide,900)})();</script><div class="app">
+</style></head><body><div id="splash" aria-label="Cargando Cookies &amp; Milk"><div class="st"><img src="k1.webp" alt="" draggable="false"><img src="i12.webp" alt="" draggable="false"><img src="k2.webp" alt="" draggable="false"><img src="i23.webp" alt="" draggable="false"><img src="k3.webp" alt="" draggable="false"><img src="i34.webp" alt="" draggable="false"><img src="k4.webp" alt="" draggable="false"><img src="i45.webp" alt="" draggable="false"><img src="k5.webp" alt="" draggable="false"><img src="k6.webp" alt="" draggable="false"></div><small>Toca para saltar</small></div>
+<script>(function(){var sp=document.getElementById('splash');if(!sp)return;var g=0,p=0;
+function hide(){if(g)return;g=1;sp.classList.add('out');setTimeout(function(){sp.remove()},600)}
+sp.addEventListener('click',hide);
+var im=[].slice.call(sp.querySelectorAll('img')),T=[0,500,680,1250,1430,2250,2430,2950,3130,3800],D=[0,180,180,200,180,200,180,200,180,320];
+function play(){if(p||g)return;p=1;if(!im[0].animate||(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)){setTimeout(hide,900);return}
+im.forEach(function(e,i){if(i)e.animate([{opacity:0},{opacity:1}],{duration:D[i],delay:T[i],fill:'forwards',easing:'ease-in-out'})});setTimeout(hide,T[9]+D[9]+1100)}
+var ready=Promise.all(im.map(function(e){return e.decode?e.decode().catch(function(){}):0}));
+Promise.race([ready,new Promise(function(r){setTimeout(r,2500)})]).then(play);setTimeout(hide,12000)})();</script><div class="app">
 <header><button class="gear" id="gear" aria-label="Ajustes">⚙️<span class="sync" id="sync" data-s="loading"></span></button><img id="logo" src="jar-sm.png" alt="Cookies & Milk"><b>Cookies & Milk 💰</b></header>
 <main id="main"></main>
 <nav id="nav"></nav>

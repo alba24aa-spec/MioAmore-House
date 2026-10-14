@@ -154,6 +154,21 @@ html{background:#EAF3F8}
 
 .yb{width:100%;margin-top:10px;border:0;border-radius:16px;background:var(--sun,#FFE49A);color:var(--ink);font:700 15px system-ui;padding:12px;cursor:pointer}
 @keyframes slR{from{transform:translateX(38px);opacity:.2}to{transform:none;opacity:1}}@keyframes slL{from{transform:translateX(-38px);opacity:.2}to{transform:none;opacity:1}}
+
+.bot{position:absolute;right:26px;bottom:calc(70px + env(safe-area-inset-bottom,0px));width:104px;height:auto;border:0;background:none;padding:0;z-index:4;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.bsp{--aw:104px;width:var(--aw);height:calc(var(--aw)*310/360);background:url(avatar.webp) 0 0/calc(var(--aw)*6) calc(var(--aw)*310/360*3) no-repeat;opacity:0;transition:opacity .4s;filter:drop-shadow(0 3px 5px #0003)}.bsp.ok{opacity:1}
+nav{z-index:5}
+.bottip{position:absolute;right:92px;top:8px;width:max-content;max-width:170px;background:var(--butterd);color:#2F3B47;border-radius:14px 14px 4px 14px;padding:8px 11px;font:700 12px/1.25 system-ui;box-shadow:0 3px 10px #0002;opacity:0;pointer-events:none;transition:opacity .4s;text-align:left}
+.bottip.show{opacity:1}
+.bhd{display:flex;gap:10px;align-items:flex-end;margin:4px 0 12px}.bhd .bav{--aw:76px;flex:none;opacity:1;filter:none;background:url(avatar.webp) 100% 100%/calc(var(--aw)*6) calc(var(--aw)*310/360*3) no-repeat;width:var(--aw);height:calc(var(--aw)*310/360)}
+.bub{background:var(--butter);border-radius:20px 20px 20px 6px;padding:12px 14px;font-weight:600;line-height:1.4;font-size:15px}
+.pl{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}.pl button{border:0;border-radius:16px;padding:9px 13px;background:var(--sky);color:var(--ink);font:700 13px system-ui;white-space:nowrap;cursor:pointer}.pl button.on{background:var(--butterd);color:#2F3B47}
+.bcard{background:var(--navbg);border-radius:22px;padding:14px 14px 12px;margin:14px 0;box-shadow:0 2px 10px #0000000f}.bcard h4{margin:0 0 4px;font-size:17px}
+.rk{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;margin:12px 0 2px;font-weight:600;font-size:14px}.rk b small{opacity:.6;font-weight:600}.rb{grid-column:1/3;height:8px;border-radius:6px;background:var(--cs)}.rb i{display:block;height:100%;border-radius:6px}
+.spl{display:flex;height:16px;border-radius:9px;overflow:hidden;margin:8px 0 6px}.spl i{display:block}
+.sv{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;border-radius:14px;margin:8px 0;font-weight:700;font-size:14px;background:var(--butter)}.sv small{display:block;font-weight:500;opacity:.7;font-size:12px;margin-top:2px}.sv.r{background:#FFD9D6;color:#5b1c1a}.sv.g{background:#D8F1E0;color:#1c4a2c}.sv b{white-space:nowrap}
+.goal{margin-top:10px}.goal>div{height:12px;border-radius:8px;background:var(--cs);overflow:hidden;margin-bottom:6px}.goal i{display:block;height:100%}
+.tips{padding-left:0;list-style:none;margin:8px 0}.tips li{background:var(--butter);border-radius:14px;padding:10px 12px;margin:8px 0;line-height:1.4;font-size:14px}
 </style></head><body><div id="splash" aria-label="Cargando Cookies &amp; Milk"><div class="st"><img src="k1.webp" alt="" draggable="false"><img src="i12.webp" alt="" draggable="false"><img src="k2.webp" alt="" draggable="false"><img src="i23.webp" alt="" draggable="false"><img src="k3.webp" alt="" draggable="false"><img src="i34.webp" alt="" draggable="false"><img src="k4.webp" alt="" draggable="false"><img src="i45.webp" alt="" draggable="false"><img src="k5.webp" alt="" draggable="false"><img src="k6.webp" alt="" draggable="false"></div><small>Toca para saltar</small></div>
 <script>(function(){var sp=document.getElementById('splash');if(!sp)return;var g=0,p=0;
 function hide(){if(g)return;g=1;sp.classList.add('out');setTimeout(function(){sp.remove()},600)}
@@ -166,11 +181,13 @@ Promise.race([ready,new Promise(function(r){setTimeout(r,2500)})]).then(play);se
 <header><button class="gear" id="gear" aria-label="Ajustes">⚙️<span class="sync" id="sync" data-s="loading"></span></button><img id="logo" src="jar-sm.png" alt="Cookies & Milk"><b>Cookies & Milk 💰</b></header>
 <main id="main"></main>
 <nav id="nav"></nav>
+<button class="bot" id="bot" aria-label="Tu asistente de gastos"><div class="bsp" id="bsp"></div><span class="bottip" id="bottip">¿Vemos en qué se va el dinero?</span></button>
 <div class="sheet" id="sheet"><div>
 <button data-k="naranja" style="background:var(--orange)">💳 Naranja</button>
 <button data-k="revolut" style="background:var(--char)">💳 Revolut</button>
 <button data-k="viajes" style="background:#63B5C6">✈️ Viajes</button></div></div>
 <div class="flow" id="flow"><div class="flagbg" id="fbg"></div><div class="ov" id="fov"></div><div class="fw" id="fw"></div></div><div class="toast" id="toast"></div>
+<div class="flow" id="botov"><div class="fw" id="botw"></div></div>
 <div class="flow" id="setov"><div class="fw" id="setw"></div></div>
 <div class="login" id="login"><form id="lf"><img src="jar-sm.png" alt=""><h2>Cookies &amp; Milk 💰</h2><input id="lem" type="email" name="email" autocomplete="username" placeholder="Correo electrónico" required><input id="lpw" type="password" name="password" autocomplete="current-password" placeholder="Contraseña" required><div class="err" id="lerr"></div><button class="save" type="submit" id="lbtn">ENTRAR</button></form></div>
 </div>
@@ -332,6 +349,83 @@ $('#main').onclick=e=>{const t=e.target.closest('[data-hm],[data-yr],[data-p],[d
  else if(d.xa)openExtra(d.xa,+d.y,+d.mo);
  else if(d.seg!==undefined)segSel(t);
  else if(d.demo){DEMO=d.demo==='on';applyData();refresh()}};
+const BAV='<div class="bsp bav ok"></div>';
+// ===== Galleta: asistente de estadísticas =====
+const FIXC=['Alquiler','Agua y Calefacción','Octopus','Garaje','GoFit','Ikea Visa','DiGi'],NECC=['Alimentación','Farmacia','Sirius y Bruma','Grow Nutrition'];
+const bkind=c=>FIXC.includes(c)?'fix':NECC.includes(c)?'nec':'oc',KCOL={fix:'#9AA5B1',nec:'#8FBEDC',oc:'#FF8A2B'},KNAM={fix:'Fijos',nec:'Necesarios',oc:'Caprichos y ocio'};
+let BEM,BALL;function binit(){if(BEM)return;BEM={Viajes:'✈️'};CATS.naranja.concat(CATS.revolut).forEach(([e,n])=>BEM[n]=e);BALL=[...CATS.naranja.map(x=>x[1]),...CATS.revolut.map(x=>x[1]),'Viajes']}
+const bcat=(c,y,m)=>c==='Viajes'?sum(trp(null,y,m)):cm('Naranja',c,y,m)+cm('Revolut',c,y,m);
+let BOT={p:'3'};
+function bper(p){const n=p==='c'?1:p==='p'?1:p==='3'?3:Math.max(1,NM-1),sh=p==='c'?0:1,out=[];
+ if(p==='y'&&NM===1){for(let m=1;m<=12;m++)out.push([NY-1,m]);return out}
+ for(let i=n-1+sh;i>=sh;i--){let m=NM-i,y=NY;while(m<1){m+=12;y--}out.push([y,m])}return out}
+const blab=p=>({c:months[NM-1]+' (en curso)',p:'el último mes completo','3':'los últimos 3 meses',y:'lo que va de año'})[p];
+function botCalc(p){binit();const per=bper(p),n=per.length,H=Math.max(1,past.length);
+ const rows=BALL.map(c=>{const v=per.reduce((s,[y,m])=>s+bcat(c,y,m),0),h=past.reduce((s,[y,m])=>s+bcat(c,y,m),0)/H;return{c,e:BEM[c],k:bkind(c),v,mv:v/n,h}}).filter(r=>r.v>0||r.h>0);
+ const tot=rows.reduce((s,r)=>s+r.v,0),casa=per.reduce((s,[y,m])=>s+accT('Naranja',y,m)+accT('Revolut',y,m),0);
+ const ing=(INC.Naranja+INC.Revolut)*n+per.reduce((s,[y,m])=>s+sum(exs('Naranja',y,m))+sum(exs('Revolut',y,m)),0);
+ return{per,n,rows,tot,casa,ing}}
+function botHTML(){const p=BOT.p,D=botCalc(p),cur=p==='c';
+ const chips=[['c','Este mes'],['p','Mes pasado'],['3','3 meses'],['y','Año']].map(([k,t])=>`<button data-bp="${k}" class="${k===p?'on':''}">${t}</button>`).join('');
+ const hd=shdr('Tu asistente')+`<div class="fb">`;
+ const any=E.length>0;
+ if(!any||D.tot<=0&&!cur)return hd+`<div class="bhd">${BAV}<div class="bub">¡Hola! Soy tu <b>asistente</b>. Todavía no tengo gastos de ${blab(p)} para analizar. Cuando añadáis algunos (o pulses «Ver ejemplo» en Inicio) os cuento en qué se va el dinero y dónde podéis ahorrar.</div></div><div class="pl">${chips}</div></div>`;
+ const kt={fix:0,nec:0,oc:0};D.rows.forEach(r=>kt[r.k]+=r.v);
+ const sorted=[...D.rows].filter(r=>r.v>0).sort((a,b)=>b.v-a.v),top=sorted[0];
+ // meses (12)
+ const L=[];for(let i=11;i>=0;i--){let m=NM-i,y=NY;while(m<1){m+=12;y--}L.push([y,m,real(y,m)])}
+ const have=L.filter(x=>x[2]>0),done=have.filter(x=>!(x[0]===NY&&x[1]===NM)),avgM=done.length?done.reduce((s,x)=>s+x[2],0)/done.length:0;
+ const mx=done.length?done.reduce((a,b)=>b[2]>a[2]?b:a):null,mn=done.length>1?done.reduce((a,b)=>b[2]<a[2]?b:a):null,mxv=Math.max(1,...L.map(x=>x[2]));
+ const bars12=`<div class="bars">${L.map(x=>{const col=mx&&x[0]===mx[0]&&x[1]===mx[1]?'#E5484D':mn&&x[0]===mn[0]&&x[1]===mn[1]?'#2E9E5B':COL.V;return `<button class="bc" tabindex="-1"><span class="bv">${x[2]?Math.round(x[2]):''}</span><div class="stk" style="height:${x[2]?Math.max(3,x[2]/mxv*120):0}px"><i style="flex:1;background:${col}"></i></div><small>${MN[x[1]-1]}</small></button>`}).join('')}</div>`;
+ // ranking
+ const rk=sorted.slice(0,8),rmx=rk.length?rk[0].v:1;
+ const rank=rk.map(r=>`<div class="rk"><span>${r.e} ${r.c}</span><b>${fmt0(r.v)} <small>${D.tot?Math.round(r.v/D.tot*100):0}%</small></b><div class="rb"><i style="width:${Math.max(3,r.v/rmx*100)}%;background:${KCOL[r.k]}"></i></div></div>`).join('');
+ const split=['fix','nec','oc'].map(k=>`<i style="flex:${kt[k]||.0001};background:${KCOL[k]}"></i>`).join('');
+ const splitL=['fix','nec','oc'].map(k=>`<span><i style="background:${KCOL[k]}"></i>${KNAM[k]} ${D.tot?Math.round(kt[k]/D.tot*100):0}%</span>`).join('');
+ // ahorro
+ const flex=D.rows.filter(r=>r.k!=='fix'&&(r.v>0||r.h>0)).map(r=>{const diff=r.mv-r.h,pct=r.h>0?diff/r.h:0;let lv,tx;
+   if(cur){lv=r.v>r.h?'r':r.v>=r.h*.8?'y':'g';tx=`llevas ${fmt0(r.v)} de ${fmt0(r.h)} habituales`}
+   else{lv=r.h>=5&&pct>.1&&diff>=8?'r':r.h>=5&&pct<-.1?'g':'y';tx=r.h<5?'concepto poco habitual':`${fmt0(r.mv)}/mes · tu media ${fmt0(r.h)}`}
+   return{...r,diff,lv,tx,sv:lv==='r'?(cur?r.v-r.h:diff):0}}).filter(r=>r.v>0).sort((a,b)=>b.sv-a.sv||b.v-a.v);
+ const sav=flex.reduce((s,r)=>s+r.sv,0),oc=kt.oc/D.n,tenp=oc*.1;
+ const ICO={r:'🔴',y:'🟡',g:'🟢'};
+ const srows=flex.slice(0,7).map(r=>`<div class="sv ${r.lv}"><span>${ICO[r.lv]} ${r.e} ${r.c}<small>${r.tx}</small></span><b>${r.lv==='r'?'−'+fmt0(r.sv)+(cur?'':'/mes'):r.lv==='g'?'¡bien!':'ok'}</b></div>`).join('');
+ // balance
+ const gm=D.casa/D.n,im=D.ing/D.n,ah=im-gm,rate=im>0?ah/im:0,goal=im*.2-ah;
+ const bal=`<div class="st"><div><small>Ingresos${cur?'':'/mes'}</small><b>${fmt0(cur?D.ing:im)}</b></div><div><small>Gasto casa${cur?'':'/mes'}</small><b>${fmt0(cur?D.casa:gm)}</b></div><div><small>Ahorro</small>${balC(cur?D.ing-D.casa:ah)}</div></div><div class="goal"><div><i style="width:${Math.max(0,Math.min(100,rate*100/20*100/100))}%;background:${rate>=.2?'#2E9E5B':rate>=0?'#F1D777':'#E5484D'}"></i></div><small>Ahorras el <b>${Math.round(rate*100)}%</b> de lo que ingresáis · objetivo recomendado 20%</small></div>`;
+ // consejos
+ const T=[];
+ if(top)T.push(`🍪 Lo que más pesa en ${blab(p)} es <b>${top.c}</b>: ${fmt0(top.v)} (${Math.round(top.v/D.tot*100)}% del total).`);
+ if(mx&&avgM>0)T.push(`📅 Vuestro mes más caro fue <b>${months[mx[1]-1]}</b> (${fmt0(mx[2])}), un ${Math.round((mx[2]/avgM-1)*100)}% por encima de la media${mn?`; el más tranquilo, <b>${months[mn[1]-1]}</b> (${fmt0(mn[2])})`:''}.`);
+ const worst=flex.find(r=>r.lv==='r');
+ if(worst)T.push(`💡 Donde más margen hay: <b>${worst.c}</b>${cur?`, ya vais por encima de lo habitual`:`, ${fmt0(worst.diff)} al mes sobre vuestra media`}. Si volvéis a la media ahorráis hasta <b>${fmt0(sav)}${cur?'':'/mes'}</b> en total.`);
+ else if(flex.length)T.push(`🎉 Ninguna categoría variable se pasa de vuestra media. ¡Buen ritmo!`);
+ if(oc>0)T.push(`✂️ Reto fácil: recortar un 10% en caprichos y ocio serían <b>${fmt0(tenp)}${cur?'':'/mes'}</b> (${fmt0(tenp*(cur?12:12))} al año).`);
+ if(im>0&&rate<.2&&!cur)T.push(`🐷 Para llegar al 20% de ahorro tendríais que apartar unos <b>${fmt0(goal)}</b> más al mes.`);
+ else if(im>0&&rate>=.2)T.push(`🐷 Estáis ahorrando el ${Math.round(rate*100)}% de lo que entra: por encima del 20% recomendado.`);
+ const fixN=kt.fix?`<p class="sm">🔒 Los gastos fijos (alquiler, suministros, DiGi, GoFit…) suman ${fmt0(kt.fix)} (${Math.round(kt.fix/D.tot*100)}%). No se recortan fácil, pero merece la pena comparar tarifas de Octopus y DiGi una vez al año.</p>`:'';
+ const greet=cur?`¡Hola! Soy tu <b>asistente</b>. En ${months[NM-1]} lleváis <b>${fmt0(D.tot)}</b> gastados${D.n&&avgM?` (vuestra media mensual es ${fmt0(avgM)})`:''}. Mira lo que he encontrado:`:`¡Hola! Soy tu <b>asistente</b>. En ${blab(p)} habéis gastado <b>${fmt0(D.tot)}</b>${D.n>1?` (${fmt0(D.tot/D.n)} al mes)`:''}. Mira lo que he encontrado:`;
+ return hd+`<div class="bhd">${BAV}<div class="bub">${greet}</div></div><div class="pl">${chips}</div>`+
+ `<div class="bcard"><h4>📅 ¿Cuándo se gasta más?</h4><p class="sm">Gasto total de los últimos 12 meses. <span style="color:#E5484D">●</span> más caro · <span style="color:#2E9E5B">●</span> más barato</p>${bars12}</div>`+
+ `<div class="bcard"><h4>🍪 ¿En qué se va el dinero?</h4><p class="sm">${blab(p)[0].toUpperCase()+blab(p).slice(1)}</p><div class="spl">${split}</div><div class="leg2">${splitL}</div>${rank}</div>`+
+ `<div class="bcard"><h4>💡 ¿Dónde se puede ahorrar?</h4><p class="sm">Comparo cada gasto variable con vuestra media histórica. 🔴 te pasas · 🟡 normal · 🟢 por debajo</p>${srows||'<p class="hint">Sin gastos variables todavía.</p>'}${fixN}</div>`+
+ `<div class="bcard"><h4>🐷 Balance y ahorro</h4>${bal}</div>`+
+ `<div class="bcard"><h4>✨ Consejos</h4><ul class="tips">${T.map(t=>`<li>${t}</li>`).join('')}</ul><p class="sm">Son cálculos con vuestros datos; no sustituyen asesoramiento financiero.</p></div></div>`}
+function openBot(){$('#botov').classList.add('show');drawBot();const t=$('#bottip');t&&t.remove()}
+function drawBot(){const w=$('#botw'),y=w.scrollTop;w.innerHTML=botHTML();w.scrollTop=y}
+$('#bot').onclick=openBot;
+$('#botw').onclick=e=>{const b=e.target.closest('[data-bp],[data-s]');if(!b)return;if(b.dataset.bp){BOT.p=b.dataset.bp;drawBot()}else if(b.dataset.s==='close'){$('#botov').classList.remove('show')}};
+try{if(!sessionStorage.getItem('cm_tip')){sessionStorage.setItem('cm_tip','1');setTimeout(()=>{const t=$('#bottip');if(t){t.classList.add('show');setTimeout(()=>t.remove(),5200)}},4500)}else{const t=$('#bottip');t&&t.remove()}}catch(e){}
+
+
+// avatar animado: se queda en el borde inferior y de vez en cuando hace su gesto
+(function(){const el=document.getElementById('bsp');if(!el)return;let f=0,busy=0,tm=0;
+ const COLS=6,ROWS=3;function show(i){f=i;const c=i%COLS,r=Math.floor(i/COLS);el.style.backgroundPosition=(c/(COLS-1)*100)+'% '+(r/(ROWS-1)*100)+'%'}
+ const im=new Image();im.onload=()=>{show(0);el.classList.add('ok');tm=setTimeout(play,3500)};im.src='avatar.webp';
+ function play(){clearTimeout(tm);if(busy||document.hidden||document.querySelector('.flow.show,#splash')){tm=setTimeout(play,4000);return}busy=1;let i=0;
+  (function fw(){show(i);if(++i<COLS*ROWS)return setTimeout(fw,95);setTimeout(function bw(){let j=COLS*ROWS-1;(function b(){show(j);if(--j>=0)return setTimeout(b,45);busy=0;tm=setTimeout(play,16000+Math.random()*16000)})()},1300)})()}
+ el.parentNode.addEventListener('click',function(){if(!busy){clearTimeout(tm);tm=setTimeout(play,350)}});
+})();
 // deslizar entre pantallas
 (function(){const ORD=[0,5,1,3,4];let x0,y0,t0,ok=false;const mn=document.getElementById('main');
  const blocked=el=>{if(el.closest('.leaflet-container,input,textarea,select,.mp'))return true;

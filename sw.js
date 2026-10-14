@@ -1,5 +1,5 @@
-const C='cm-v4';
-const A=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png','apple-touch-icon.png','jar-sm.png','k1.webp','i12.webp','k2.webp','i23.webp','k3.webp','i34.webp','k4.webp','i45.webp','k5.webp','k6.webp'];
+const C='cm-v5';
+const A=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png','apple-touch-icon.png','jar-sm.png','avatar.webp','k1.webp','i12.webp','k2.webp','i23.webp','k3.webp','i34.webp','k4.webp','i45.webp','k5.webp','k6.webp'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(A)));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))));self.clients.claim()});
 self.addEventListener('fetch',e=>{

@@ -169,6 +169,11 @@ nav{z-index:5}
 .sv{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;border-radius:14px;margin:8px 0;font-weight:700;font-size:14px;background:var(--butter)}.sv small{display:block;font-weight:500;opacity:.7;font-size:12px;margin-top:2px}.sv.r{background:#FFD9D6;color:#5b1c1a}.sv.g{background:#D8F1E0;color:#1c4a2c}.sv b{white-space:nowrap}
 .goal{margin-top:10px}.goal>div{height:12px;border-radius:8px;background:var(--cs);overflow:hidden;margin-bottom:6px}.goal i{display:block;height:100%}
 .tips{padding-left:0;list-style:none;margin:8px 0}.tips li{background:var(--butter);border-radius:14px;padding:10px 12px;margin:8px 0;line-height:1.4;font-size:14px}
+.lbl2{font-weight:800;font-size:12px;opacity:.6;margin:12px 2px 4px;text-transform:uppercase;letter-spacing:.04em}
+.bs{width:100%;box-sizing:border-box;border:2px solid var(--cs);border-radius:16px;padding:11px 14px;font:600 15px system-ui;background:var(--navbg);color:var(--ink);margin:2px 0 8px}
+.pl+.pl{margin-top:6px}
+button.rk,button.sv{width:100%;border:0;text-align:left;font-family:inherit;color:inherit;cursor:pointer}button.rk{background:none;padding:0}
+.ex2{display:flex;justify-content:space-between;gap:10px;padding:9px 2px;border-top:1px solid var(--cs);font-size:14px;font-weight:600}.ex2 small{display:block;font-weight:500;opacity:.65;font-size:12px}.ex2 b{white-space:nowrap}
 </style></head><body><div id="splash" aria-label="Cargando Cookies &amp; Milk"><div class="st"><img src="k1.webp" alt="" draggable="false"><img src="i12.webp" alt="" draggable="false"><img src="k2.webp" alt="" draggable="false"><img src="i23.webp" alt="" draggable="false"><img src="k3.webp" alt="" draggable="false"><img src="i34.webp" alt="" draggable="false"><img src="k4.webp" alt="" draggable="false"><img src="i45.webp" alt="" draggable="false"><img src="k5.webp" alt="" draggable="false"><img src="k6.webp" alt="" draggable="false"></div><small>Toca para saltar</small></div>
 <script>(function(){var sp=document.getElementById('splash');if(!sp)return;var g=0,p=0;
 function hide(){if(g)return;g=1;sp.classList.add('out');setTimeout(function(){sp.remove()},600)}
@@ -181,7 +186,7 @@ Promise.race([ready,new Promise(function(r){setTimeout(r,2500)})]).then(play);se
 <header><button class="gear" id="gear" aria-label="Ajustes">⚙️<span class="sync" id="sync" data-s="loading"></span></button><img id="logo" src="jar-sm.png" alt="Cookies & Milk"><b>Cookies & Milk 💰</b></header>
 <main id="main"></main>
 <nav id="nav"></nav>
-<button class="bot" id="bot" aria-label="Tu asistente de gastos"><div class="bsp" id="bsp"></div><span class="bottip" id="bottip">¿Vemos en qué se va el dinero?</span></button>
+<button class="bot" id="bot" aria-label="Davi, tu asistente de gastos"><div class="bsp" id="bsp"></div><span class="bottip" id="bottip">¿Vemos en qué se va el dinero?</span></button>
 <div class="sheet" id="sheet"><div>
 <button data-k="naranja" style="background:var(--orange)">💳 Naranja</button>
 <button data-k="revolut" style="background:var(--char)">💳 Revolut</button>
@@ -350,73 +355,100 @@ $('#main').onclick=e=>{const t=e.target.closest('[data-hm],[data-yr],[data-p],[d
  else if(d.seg!==undefined)segSel(t);
  else if(d.demo){DEMO=d.demo==='on';applyData();refresh()}};
 const BAV='<div class="bsp bav ok"></div>';
-// ===== Galleta: asistente de estadísticas =====
+// ===== Davi: asistente de estadísticas =====
 const FIXC=['Alquiler','Agua y Calefacción','Octopus','Garaje','GoFit','Ikea Visa','DiGi'],NECC=['Alimentación','Farmacia','Sirius y Bruma','Grow Nutrition'];
 const bkind=c=>FIXC.includes(c)?'fix':NECC.includes(c)?'nec':'oc',KCOL={fix:'#9AA5B1',nec:'#8FBEDC',oc:'#FF8A2B'},KNAM={fix:'Fijos',nec:'Necesarios',oc:'Caprichos y ocio'};
 let BEM,BALL;function binit(){if(BEM)return;BEM={Viajes:'✈️'};CATS.naranja.concat(CATS.revolut).forEach(([e,n])=>BEM[n]=e);BALL=[...CATS.naranja.map(x=>x[1]),...CATS.revolut.map(x=>x[1]),'Viajes']}
-const bcat=(c,y,m)=>c==='Viajes'?sum(trp(null,y,m)):cm('Naranja',c,y,m)+cm('Revolut',c,y,m);
-let BOT={p:'3'};
+const bem=c=>BOT.acc==='Viajes'?((TC.find(x=>x[1]===c)||[''])[0]):BEM[c]||'';
+let BOT={p:'3',acc:'all',q:'',cat:''},BD={},BM={};
+const ACCS=[['all','Todo'],['Naranja','🟠 Naranja'],['Revolut','⚫ Revolut'],['Viajes','✈️ Viajes']];
+const tcn=e=>e.cat.replace(/^\S+\s/,'');
+const bScope=()=>{const a=BOT.acc;return E.filter(e=>a==='all'||(a==='Viajes'?e.kind==='trip':e.kind==='casa'?e.acc===a:e.to===a))};
+const bCatOf=e=>e.kind==='casa'?e.cat:BOT.acc==='Viajes'?tcn(e):'Viajes';
+function bbuild(){binit();BD={};BM={};bScope().forEach(e=>{const c=bCatOf(e);(BD[c]=BD[c]||{})[e.m]=(BD[c][e.m]||0)+e.amt;BM[e.m]=(BM[e.m]||0)+e.amt})}
+const bcat=(c,y,m)=>(BD[c]&&BD[c][K(y,m)])||0,bmon=(y,m)=>BM[K(y,m)]||0;
+function bCats(){const a=BOT.acc;if(a==='Viajes')return TC.map(x=>x[1]);if(a==='Naranja')return[...CATS.naranja.map(x=>x[1]),'Viajes'];if(a==='Revolut')return[...CATS.revolut.map(x=>x[1]),'Viajes'];return BALL}
 function bper(p){const n=p==='c'?1:p==='p'?1:p==='3'?3:Math.max(1,NM-1),sh=p==='c'?0:1,out=[];
  if(p==='y'&&NM===1){for(let m=1;m<=12;m++)out.push([NY-1,m]);return out}
  for(let i=n-1+sh;i>=sh;i--){let m=NM-i,y=NY;while(m<1){m+=12;y--}out.push([y,m])}return out}
 const blab=p=>({c:months[NM-1]+' (en curso)',p:'el último mes completo','3':'los últimos 3 meses',y:'lo que va de año'})[p];
-function botCalc(p){binit();const per=bper(p),n=per.length,H=Math.max(1,past.length);
- const rows=BALL.map(c=>{const v=per.reduce((s,[y,m])=>s+bcat(c,y,m),0),h=past.reduce((s,[y,m])=>s+bcat(c,y,m),0)/H;return{c,e:BEM[c],k:bkind(c),v,mv:v/n,h}}).filter(r=>r.v>0||r.h>0);
- const tot=rows.reduce((s,r)=>s+r.v,0),casa=per.reduce((s,[y,m])=>s+accT('Naranja',y,m)+accT('Revolut',y,m),0);
- const ing=(INC.Naranja+INC.Revolut)*n+per.reduce((s,[y,m])=>s+sum(exs('Naranja',y,m))+sum(exs('Revolut',y,m)),0);
+const ascope=()=>BOT.acc==='all'?'':BOT.acc==='Viajes'?' (solo viajes)':' (solo '+BOT.acc+')';
+function botCalc(p){bbuild();const per=bper(p),n=per.length,H=Math.max(1,past.length),a=BOT.acc;
+ const rows=bCats().map(c=>{const v=per.reduce((s,[y,m])=>s+bcat(c,y,m),0),h=past.reduce((s,[y,m])=>s+bcat(c,y,m),0)/H;return{c,e:bem(c),k:bkind(c),v,mv:v/n,h}}).filter(r=>r.v>0||r.h>0);
+ const tot=rows.reduce((s,r)=>s+r.v,0);
+ const casa=per.reduce((s,[y,m])=>s+(a==='all'?accT('Naranja',y,m)+accT('Revolut',y,m):a==='Viajes'?0:accT(a,y,m)),0);
+ const accI=a==='all'?['Naranja','Revolut']:a==='Viajes'?[]:[a];
+ const ing=accI.reduce((s,x)=>s+INC[x]*n+per.reduce((t,[y,m])=>t+sum(exs(x,y,m)),0),0);
  return{per,n,rows,tot,casa,ing}}
-function botHTML(){const p=BOT.p,D=botCalc(p),cur=p==='c';
- const chips=[['c','Este mes'],['p','Mes pasado'],['3','3 meses'],['y','Año']].map(([k,t])=>`<button data-bp="${k}" class="${k===p?'on':''}">${t}</button>`).join('');
- const hd=shdr('Tu asistente')+`<div class="fb">`;
- const any=E.length>0;
- if(!any||D.tot<=0&&!cur)return hd+`<div class="bhd">${BAV}<div class="bub">¡Hola! Soy tu <b>asistente</b>. Todavía no tengo gastos de ${blab(p)} para analizar. Cuando añadáis algunos (o pulses «Ver ejemplo» en Inicio) os cuento en qué se va el dinero y dónde podéis ahorrar.</div></div><div class="pl">${chips}</div></div>`;
+function mbars(L,mx,mn){const m=Math.max(1,...L.map(x=>x[2]));return `<div class="bars">${L.map(x=>{const col=mx&&x[0]===mx[0]&&x[1]===mx[1]?'#E5484D':mn&&x[0]===mn[0]&&x[1]===mn[1]?'#2E9E5B':COL.V;return `<button class="bc" tabindex="-1"><span class="bv">${x[2]?Math.round(x[2]):''}</span><div class="stk" style="height:${x[2]?Math.max(3,x[2]/m*120):0}px"><i style="flex:1;background:${col}"></i></div><small>${MN[x[1]-1]}</small></button>`}).join('')}</div>`}
+function l12(f){const L=[];for(let i=11;i>=0;i--){let m=NM-i,y=NY;while(m<1){m+=12;y--}L.push([y,m,f(y,m)])}return L}
+function extremes(L){const done=L.filter(x=>x[2]>0&&!(x[0]===NY&&x[1]===NM));return{done,mx:done.length?done.reduce((a,b)=>b[2]>a[2]?b:a):null,mn:done.length>1?done.reduce((a,b)=>b[2]<a[2]?b:a):null,avg:done.length?done.reduce((s,x)=>s+x[2],0)/done.length:0}}
+const plHTML=()=>[['c','Este mes'],['p','Mes pasado'],['3','3 meses'],['y','Año']].map(([k,t])=>`<button data-bp="${k}" class="${k===BOT.p?'on':''}">${t}</button>`).join('');
+function bCtl(){bbuild();const cats=bCats().filter(c=>BD[c]&&Object.values(BD[c]).some(v=>v>0));
+ return `<div class="pl">${plHTML()}</div><div class="lbl2">Cuenta</div><div class="pl">${ACCS.map(([k,t])=>`<button data-ba="${k}" class="${k===BOT.acc?'on':''}">${t}</button>`).join('')}</div>`+
+ `<div class="lbl2">Concepto</div><input id="bq" class="bs" type="search" autocomplete="off" placeholder="🔍 Busca un concepto, comercio o viaje…" value="${escH(BOT.q)}"><div class="pl" id="bchips"><button data-bc="" class="${!BOT.cat&&!BOT.q?'on':''}">Todos</button>${cats.map(c=>`<button data-bc="${escH(c)}" class="${BOT.cat===c?'on':''}">${bem(c)} ${escH(c)}</button>`).join('')}</div>`}
+function bMatch(e,q){const t=norm([e.obs||'',bCatOf(e),e.kind==='trip'?((trips.find(t=>t.id===e.trip)||{}).place||''):'',e.kind==='trip'?e.to:e.acc].join(' '));return q.every(w=>t.includes(w))}
+function bConcept(){bbuild();const S=bScope();let items,title;
+ if(BOT.cat){items=S.filter(e=>bCatOf(e)===BOT.cat);title=(bem(BOT.cat)+' '+BOT.cat).trim()}
+ else if(BOT.q.trim()){const q=norm(BOT.q.trim()).split(/\s+/);items=S.filter(e=>bMatch(e,q));title='🔍 «'+escH(BOT.q.trim())+'»'}
+ else return '';
+ if(!items.length)return `<div class="bcard"><h4>${title}</h4><p class="hint">No encuentro gastos con ese concepto${ascope()}.</p></div>`;
+ const byM={};items.forEach(e=>byM[e.m]=(byM[e.m]||0)+e.amt);
+ const per=bper(BOT.p),n=per.length,P=per.reduce((s,[y,m])=>s+(byM[K(y,m)]||0),0),H=Math.max(1,past.length),h=past.reduce((s,[y,m])=>s+(byM[K(y,m)]||0),0)/H;
+ const Tp=per.reduce((s,[y,m])=>s+bmon(y,m),0),L=l12((y,m)=>byM[K(y,m)]||0),X=extremes(L),tot=items.reduce((s,e)=>s+e.amt,0);
+ const last=[...items].sort((a,b)=>key(b).localeCompare(key(a))).slice(0,8);
+ const lab=e=>e.kind==='trip'?'✈️ '+((trips.find(t=>t.id===e.trip)||{}).place||'Viaje')+' · '+tcn(e):e.cat;
+ const pc=h>0?Math.round((P/n/h-1)*100):null;
+ const txt=P<=0?`En ${blab(BOT.p)} no ha habido gasto en este concepto.`:`En ${blab(BOT.p)}: <b>${fmt0(P)}</b>${n>1?` (${fmt0(P/n)}/mes)`:''}${Tp>0?`, un ${Math.round(P/Tp*100)}% del gasto${ascope()}`:''}.${pc!==null&&h>=5?` Frente a tu media de ${fmt0(h)}/mes: <b style="color:${pc>0?'#E5484D':'#2E9E5B'}">${pc>0?'+':''}${pc}%</b>.`:''}`;
+ return `<div class="bcard"><h4>${title}</h4><div class="st"><div><small>Total histórico</small><b>${fmt0(tot)}</b></div><div><small>Media/mes</small><b>${fmt0(h)}</b></div><div><small>Gastos</small><b>${items.length}</b></div></div><p class="sm" style="margin-top:10px;font-size:13px;opacity:1">${txt}</p>`+
+ `<p class="sm">Últimos 12 meses${X.mx?` · más alto: <b>${months[X.mx[1]-1]}</b> (${fmt0(X.mx[2])})`:''}</p>${mbars(L,X.mx,null)}<p class="sm" style="margin-top:8px">Últimos gastos</p>`+
+ last.map(e=>`<div class="ex2"><span>${e.d?fd(e.d).slice(0,5):ml[+e.m.slice(5)-1]} · ${escH(lab(e))}${e.obs?`<small>${escH(e.obs)}</small>`:''}</span><b>${fmt(e.amt)}</b></div>`).join('')+`</div>`}
+function botRest(){const p=BOT.p,D=botCalc(p),cur=p==='c',a=BOT.acc;
+ if(!E.length||D.tot<=0&&!cur)return `<div class="bcard"><p class="hint">Todavía no hay gastos de ${blab(p)}${ascope()} para analizar. Cuando añadáis algunos (o pulses «Ver ejemplo» en Inicio) os cuento en qué se va el dinero y dónde podéis ahorrar.</p></div>`;
  const kt={fix:0,nec:0,oc:0};D.rows.forEach(r=>kt[r.k]+=r.v);
- const sorted=[...D.rows].filter(r=>r.v>0).sort((a,b)=>b.v-a.v),top=sorted[0];
- // meses (12)
- const L=[];for(let i=11;i>=0;i--){let m=NM-i,y=NY;while(m<1){m+=12;y--}L.push([y,m,real(y,m)])}
- const have=L.filter(x=>x[2]>0),done=have.filter(x=>!(x[0]===NY&&x[1]===NM)),avgM=done.length?done.reduce((s,x)=>s+x[2],0)/done.length:0;
- const mx=done.length?done.reduce((a,b)=>b[2]>a[2]?b:a):null,mn=done.length>1?done.reduce((a,b)=>b[2]<a[2]?b:a):null,mxv=Math.max(1,...L.map(x=>x[2]));
- const bars12=`<div class="bars">${L.map(x=>{const col=mx&&x[0]===mx[0]&&x[1]===mx[1]?'#E5484D':mn&&x[0]===mn[0]&&x[1]===mn[1]?'#2E9E5B':COL.V;return `<button class="bc" tabindex="-1"><span class="bv">${x[2]?Math.round(x[2]):''}</span><div class="stk" style="height:${x[2]?Math.max(3,x[2]/mxv*120):0}px"><i style="flex:1;background:${col}"></i></div><small>${MN[x[1]-1]}</small></button>`}).join('')}</div>`;
- // ranking
+ const sorted=[...D.rows].filter(r=>r.v>0).sort((x,y)=>y.v-x.v),top=sorted[0];
+ const L=l12((y,m)=>bmon(y,m)),X=extremes(L),avgM=X.avg;
  const rk=sorted.slice(0,8),rmx=rk.length?rk[0].v:1;
- const rank=rk.map(r=>`<div class="rk"><span>${r.e} ${r.c}</span><b>${fmt0(r.v)} <small>${D.tot?Math.round(r.v/D.tot*100):0}%</small></b><div class="rb"><i style="width:${Math.max(3,r.v/rmx*100)}%;background:${KCOL[r.k]}"></i></div></div>`).join('');
+ const rank=rk.map(r=>`<button class="rk" data-bc="${escH(r.c)}"><span>${r.e} ${r.c}</span><b>${fmt0(r.v)} <small>${D.tot?Math.round(r.v/D.tot*100):0}%</small></b><div class="rb"><i style="width:${Math.max(3,r.v/rmx*100)}%;background:${KCOL[r.k]}"></i></div></button>`).join('');
  const split=['fix','nec','oc'].map(k=>`<i style="flex:${kt[k]||.0001};background:${KCOL[k]}"></i>`).join('');
  const splitL=['fix','nec','oc'].map(k=>`<span><i style="background:${KCOL[k]}"></i>${KNAM[k]} ${D.tot?Math.round(kt[k]/D.tot*100):0}%</span>`).join('');
- // ahorro
  const flex=D.rows.filter(r=>r.k!=='fix'&&(r.v>0||r.h>0)).map(r=>{const diff=r.mv-r.h,pct=r.h>0?diff/r.h:0;let lv,tx;
    if(cur){lv=r.v>r.h?'r':r.v>=r.h*.8?'y':'g';tx=`llevas ${fmt0(r.v)} de ${fmt0(r.h)} habituales`}
    else{lv=r.h>=5&&pct>.1&&diff>=8?'r':r.h>=5&&pct<-.1?'g':'y';tx=r.h<5?'concepto poco habitual':`${fmt0(r.mv)}/mes · tu media ${fmt0(r.h)}`}
-   return{...r,diff,lv,tx,sv:lv==='r'?(cur?r.v-r.h:diff):0}}).filter(r=>r.v>0).sort((a,b)=>b.sv-a.sv||b.v-a.v);
- const sav=flex.reduce((s,r)=>s+r.sv,0),oc=kt.oc/D.n,tenp=oc*.1;
- const ICO={r:'🔴',y:'🟡',g:'🟢'};
- const srows=flex.slice(0,7).map(r=>`<div class="sv ${r.lv}"><span>${ICO[r.lv]} ${r.e} ${r.c}<small>${r.tx}</small></span><b>${r.lv==='r'?'−'+fmt0(r.sv)+(cur?'':'/mes'):r.lv==='g'?'¡bien!':'ok'}</b></div>`).join('');
- // balance
- const gm=D.casa/D.n,im=D.ing/D.n,ah=im-gm,rate=im>0?ah/im:0,goal=im*.2-ah;
- const bal=`<div class="st"><div><small>Ingresos${cur?'':'/mes'}</small><b>${fmt0(cur?D.ing:im)}</b></div><div><small>Gasto casa${cur?'':'/mes'}</small><b>${fmt0(cur?D.casa:gm)}</b></div><div><small>Ahorro</small>${balC(cur?D.ing-D.casa:ah)}</div></div><div class="goal"><div><i style="width:${Math.max(0,Math.min(100,rate*100/20*100/100))}%;background:${rate>=.2?'#2E9E5B':rate>=0?'#F1D777':'#E5484D'}"></i></div><small>Ahorras el <b>${Math.round(rate*100)}%</b> de lo que ingresáis · objetivo recomendado 20%</small></div>`;
- // consejos
+   return{...r,diff,lv,tx,sv:lv==='r'?(cur?r.v-r.h:diff):0}}).filter(r=>r.v>0).sort((x,y)=>y.sv-x.sv||y.v-x.v);
+ const sav=flex.reduce((s,r)=>s+r.sv,0),oc=kt.oc/D.n,tenp=oc*.1,ICO={r:'🔴',y:'🟡',g:'🟢'};
+ const srows=flex.slice(0,7).map(r=>`<button class="sv ${r.lv}" data-bc="${escH(r.c)}"><span>${ICO[r.lv]} ${r.e} ${r.c}<small>${r.tx}</small></span><b>${r.lv==='r'?'−'+fmt0(r.sv)+(cur?'':'/mes'):r.lv==='g'?'¡bien!':'ok'}</b></button>`).join('');
+ const hasInc=D.ing>0,gm=D.casa/D.n,im=D.ing/D.n,ah=im-gm,rate=im>0?ah/im:0,goal=im*.2-ah;
+ const bal=hasInc?`<div class="bcard"><h4>🐷 Balance y ahorro${a==='all'?'':' · '+a}</h4><div class="st"><div><small>Ingresos${cur?'':'/mes'}</small><b>${fmt0(cur?D.ing:im)}</b></div><div><small>Gasto casa${cur?'':'/mes'}</small><b>${fmt0(cur?D.casa:gm)}</b></div><div><small>Ahorro</small>${balC(cur?D.ing-D.casa:ah)}</div></div><div class="goal"><div><i style="width:${Math.max(0,Math.min(100,rate*100/20*100/100))}%;background:${rate>=.2?'#2E9E5B':rate>=0?'#F1D777':'#E5484D'}"></i></div><small>Ahorras el <b>${Math.round(rate*100)}%</b> de lo que ingresáis · objetivo recomendado 20%</small></div></div>`:'';
  const T=[];
- if(top)T.push(`🍪 Lo que más pesa en ${blab(p)} es <b>${top.c}</b>: ${fmt0(top.v)} (${Math.round(top.v/D.tot*100)}% del total).`);
- if(mx&&avgM>0)T.push(`📅 Vuestro mes más caro fue <b>${months[mx[1]-1]}</b> (${fmt0(mx[2])}), un ${Math.round((mx[2]/avgM-1)*100)}% por encima de la media${mn?`; el más tranquilo, <b>${months[mn[1]-1]}</b> (${fmt0(mn[2])})`:''}.`);
+ if(top)T.push(`🍪 Lo que más pesa en ${blab(p)}${ascope()} es <b>${top.c}</b>: ${fmt0(top.v)} (${Math.round(top.v/D.tot*100)}% del total).`);
+ if(X.mx&&avgM>0)T.push(`📅 El mes más caro fue <b>${months[X.mx[1]-1]}</b> (${fmt0(X.mx[2])}), un ${Math.round((X.mx[2]/avgM-1)*100)}% por encima de la media${X.mn?`; el más tranquilo, <b>${months[X.mn[1]-1]}</b> (${fmt0(X.mn[2])})`:''}.`);
  const worst=flex.find(r=>r.lv==='r');
  if(worst)T.push(`💡 Donde más margen hay: <b>${worst.c}</b>${cur?`, ya vais por encima de lo habitual`:`, ${fmt0(worst.diff)} al mes sobre vuestra media`}. Si volvéis a la media ahorráis hasta <b>${fmt0(sav)}${cur?'':'/mes'}</b> en total.`);
  else if(flex.length)T.push(`🎉 Ninguna categoría variable se pasa de vuestra media. ¡Buen ritmo!`);
- if(oc>0)T.push(`✂️ Reto fácil: recortar un 10% en caprichos y ocio serían <b>${fmt0(tenp)}${cur?'':'/mes'}</b> (${fmt0(tenp*(cur?12:12))} al año).`);
- if(im>0&&rate<.2&&!cur)T.push(`🐷 Para llegar al 20% de ahorro tendríais que apartar unos <b>${fmt0(goal)}</b> más al mes.`);
- else if(im>0&&rate>=.2)T.push(`🐷 Estáis ahorrando el ${Math.round(rate*100)}% de lo que entra: por encima del 20% recomendado.`);
+ if(oc>0)T.push(`✂️ Reto fácil: recortar un 10% en caprichos y ocio serían <b>${fmt0(tenp)}${cur?'':'/mes'}</b> (${fmt0(tenp*12)} al año).`);
+ if(hasInc&&rate<.2&&!cur)T.push(`🐷 Para llegar al 20% de ahorro tendríais que apartar unos <b>${fmt0(goal)}</b> más al mes.`);
+ else if(hasInc&&rate>=.2)T.push(`🐷 Estáis ahorrando el ${Math.round(rate*100)}% de lo que entra: por encima del 20% recomendado.`);
  const fixN=kt.fix?`<p class="sm">🔒 Los gastos fijos (alquiler, suministros, DiGi, GoFit…) suman ${fmt0(kt.fix)} (${Math.round(kt.fix/D.tot*100)}%). No se recortan fácil, pero merece la pena comparar tarifas de Octopus y DiGi una vez al año.</p>`:'';
- const greet=cur?`¡Hola! Soy tu <b>asistente</b>. En ${months[NM-1]} lleváis <b>${fmt0(D.tot)}</b> gastados${D.n&&avgM?` (vuestra media mensual es ${fmt0(avgM)})`:''}. Mira lo que he encontrado:`:`¡Hola! Soy tu <b>asistente</b>. En ${blab(p)} habéis gastado <b>${fmt0(D.tot)}</b>${D.n>1?` (${fmt0(D.tot/D.n)} al mes)`:''}. Mira lo que he encontrado:`;
- return hd+`<div class="bhd">${BAV}<div class="bub">${greet}</div></div><div class="pl">${chips}</div>`+
- `<div class="bcard"><h4>📅 ¿Cuándo se gasta más?</h4><p class="sm">Gasto total de los últimos 12 meses. <span style="color:#E5484D">●</span> más caro · <span style="color:#2E9E5B">●</span> más barato</p>${bars12}</div>`+
- `<div class="bcard"><h4>🍪 ¿En qué se va el dinero?</h4><p class="sm">${blab(p)[0].toUpperCase()+blab(p).slice(1)}</p><div class="spl">${split}</div><div class="leg2">${splitL}</div>${rank}</div>`+
- `<div class="bcard"><h4>💡 ¿Dónde se puede ahorrar?</h4><p class="sm">Comparo cada gasto variable con vuestra media histórica. 🔴 te pasas · 🟡 normal · 🟢 por debajo</p>${srows||'<p class="hint">Sin gastos variables todavía.</p>'}${fixN}</div>`+
- `<div class="bcard"><h4>🐷 Balance y ahorro</h4>${bal}</div>`+
- `<div class="bcard"><h4>✨ Consejos</h4><ul class="tips">${T.map(t=>`<li>${t}</li>`).join('')}</ul><p class="sm">Son cálculos con vuestros datos; no sustituyen asesoramiento financiero.</p></div></div>`}
+ return `<div class="bcard"><h4>📅 ¿Cuándo se gasta más?${a==='all'?'':' · '+a}</h4><p class="sm">Últimos 12 meses. <span style="color:#E5484D">●</span> más caro · <span style="color:#2E9E5B">●</span> más barato</p>${mbars(L,X.mx,X.mn)}</div>`+
+ `<div class="bcard"><h4>🍪 ¿En qué se va el dinero?</h4><p class="sm">${blab(p)[0].toUpperCase()+blab(p).slice(1)}${ascope()} · toca un concepto para estudiarlo</p>${a==='Viajes'?'':`<div class="spl">${split}</div><div class="leg2">${splitL}</div>`}${rank}</div>`+
+ `<div class="bcard"><h4>💡 ¿Dónde se puede ahorrar?</h4><p class="sm">Comparo cada gasto variable con vuestra media histórica. 🔴 te pasas · 🟡 normal · 🟢 por debajo</p>${srows||'<p class="hint">Sin gastos variables todavía.</p>'}${a==='Viajes'?'':fixN}</div>`+bal+
+ `<div class="bcard"><h4>✨ Consejos</h4><ul class="tips">${T.map(t=>`<li>${t}</li>`).join('')}</ul><p class="sm">Son cálculos con vuestros datos; no sustituyen asesoramiento financiero.</p></div>`}
+function botGreet(){const p=BOT.p,D=botCalc(p),cur=p==='c',X=extremes(l12((y,m)=>bmon(y,m)));
+ if(!E.length||D.tot<=0&&!cur)return `¡Hola! Soy <b>Davi</b> 👋. Todavía no tengo gastos${ascope()} de ${blab(p)} para analizar. Cuando añadáis algunos os cuento en qué se va el dinero y dónde podéis ahorrar.`;
+ return cur?`¡Hola! Soy <b>Davi</b> 👋. En ${months[NM-1]}${ascope()} lleváis <b>${fmt0(D.tot)}</b> gastados${X.avg?` (vuestra media mensual es ${fmt0(X.avg)})`:''}. Elige una cuenta o busca un concepto para estudiarlo.`:`¡Hola! Soy <b>Davi</b> 👋. En ${blab(p)}${ascope()} habéis gastado <b>${fmt0(D.tot)}</b>${D.n>1?` (${fmt0(D.tot/D.n)} al mes)`:''}. Elige una cuenta o busca un concepto para estudiarlo.`}
+function botHTML(){return shdr('Davi · tu asistente')+`<div class="fb"><div class="bhd">${BAV}<div class="bub" id="bgr">${botGreet()}</div></div>${bCtl()}<div id="bcon">${bConcept()}</div><div id="brest">${botRest()}</div></div>`}
 function openBot(){$('#botov').classList.add('show');drawBot();const t=$('#bottip');t&&t.remove()}
 function drawBot(){const w=$('#botw'),y=w.scrollTop;w.innerHTML=botHTML();w.scrollTop=y}
+function drawCon(){$('#bcon').innerHTML=bConcept();document.querySelectorAll('#bchips button').forEach(b=>b.classList.toggle('on',(b.dataset.bc||'')===BOT.cat&&(BOT.cat||!BOT.q)))}
 $('#bot').onclick=openBot;
-$('#botw').onclick=e=>{const b=e.target.closest('[data-bp],[data-s]');if(!b)return;if(b.dataset.bp){BOT.p=b.dataset.bp;drawBot()}else if(b.dataset.s==='close'){$('#botov').classList.remove('show')}};
+$('#botw').onclick=e=>{const b=e.target.closest('[data-bp],[data-ba],[data-bc],[data-s]');if(!b)return;const d=b.dataset;
+ if(d.bp){BOT.p=d.bp;drawBot()}
+ else if(d.ba){BOT.acc=d.ba;if(BOT.cat&&!bCats().includes(BOT.cat))BOT.cat='';drawBot()}
+ else if(d.bc!==undefined){BOT.cat=d.bc;BOT.q='';drawBot();if(d.bc){const c=$('#bcon');c&&c.scrollIntoView({block:'start',behavior:'smooth'})}}
+ else if(d.s==='close'){$('#botov').classList.remove('show')}};
+$('#botw').oninput=e=>{if(e.target.id!=='bq')return;BOT.q=e.target.value;BOT.cat='';drawCon()};
 try{if(!sessionStorage.getItem('cm_tip')){sessionStorage.setItem('cm_tip','1');setTimeout(()=>{const t=$('#bottip');if(t){t.classList.add('show');setTimeout(()=>t.remove(),5200)}},4500)}else{const t=$('#bottip');t&&t.remove()}}catch(e){}
-
 
 // avatar animado: se queda en el borde inferior y de vez en cuando hace su gesto
 (function(){const el=document.getElementById('bsp');if(!el)return;let f=0,busy=0,tm=0;

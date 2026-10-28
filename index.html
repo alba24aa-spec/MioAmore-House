@@ -158,6 +158,14 @@ html{background:#EAF3F8}
 .bot{position:absolute;right:26px;bottom:calc(70px + env(safe-area-inset-bottom,0px));width:104px;height:auto;border:0;background:none;padding:0;z-index:4;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .bsp{--aw:104px;width:var(--aw);height:calc(var(--aw)*310/360);background:url(avatar.webp) 0 0/calc(var(--aw)*6) calc(var(--aw)*310/360*3) no-repeat;opacity:0;transition:opacity .4s;filter:drop-shadow(0 3px 5px #0003)}.bsp.ok{opacity:1}
 nav{z-index:5}
+.sheet{z-index:7}.sheet div{padding-bottom:calc(28px + env(safe-area-inset-bottom,0px) + 12px)}
+.fb{padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
+.sup{display:flex;flex-wrap:wrap;gap:8px}.sup button{border:2px solid transparent;border-radius:14px;padding:11px 14px;font:700 14px system-ui;color:var(--ink);background:var(--sky);cursor:pointer}.sup .on{border-color:var(--ink);background:var(--butter)}
+.sbk{display:flex;justify-content:space-between;align-items:center;padding:9px 2px;border-bottom:1px solid #0000000f;font-size:14px}.sbk b{font-weight:800}.sbk small{opacity:.6;margin-left:6px}
+.lk{background:none;border:0;color:inherit;opacity:.75;font:600 13px system-ui;text-decoration:underline;margin-top:8px;cursor:pointer;padding:6px 2px;display:block}.mf input{margin-bottom:2px}
+.bal{background:var(--navbg);border-radius:22px;padding:14px;margin:12px 0;box-shadow:0 2px 10px #0000000f}.bal h3{margin:0 0 8px}
+.bal .r{display:flex;justify-content:space-between;padding:6px 0;font-size:15px}.bal .r.t{border-top:2px solid #0000001a;margin-top:4px;padding-top:10px;font-size:18px;font-weight:800}
+.bal .yb{margin-top:12px}.bal .lk{background:none;border:0;color:inherit;opacity:.7;font:600 13px system-ui;text-decoration:underline;margin-top:8px;cursor:pointer;padding:4px}
 .bottip{position:absolute;right:92px;top:8px;width:max-content;max-width:170px;background:var(--butterd);color:#2F3B47;border-radius:14px 14px 4px 14px;padding:8px 11px;font:700 12px/1.25 system-ui;box-shadow:0 3px 10px #0002;opacity:0;pointer-events:none;transition:opacity .4s;text-align:left}
 .bottip.show{opacity:1}
 .bhd{display:flex;gap:10px;align-items:flex-end;margin:4px 0 12px}.bhd .bav{--aw:76px;flex:none;opacity:1;filter:none;background:url(avatar.webp) 100% 100%/calc(var(--aw)*6) calc(var(--aw)*310/360*3) no-repeat;width:var(--aw);height:calc(var(--aw)*310/360)}
@@ -238,12 +246,22 @@ function segSel(c){const g=c.closest('.dg'),k=c.dataset.seg,was=g.dataset.sel===
  const r=g.querySelector('.lg.hl'),c1=g.querySelector('.c1'),c2=g.querySelector('.c2');
  if(r){c1.textContent=r.querySelector('span').firstChild.textContent.slice(0,26);c2.textContent=r.querySelector('b').textContent;r.scrollIntoView({block:'nearest',behavior:'smooth'})}else{c1.textContent='';c2.textContent=g.dataset.t}}
 const sum2=a=>a.reduce((s,i)=>s+i.v,0);
-const row=e=>`<button class="ex" data-ex="${e.id}"><span class="dt">${e.d?fd(e.d).slice(0,5):ml[+e.m.slice(5)-1]}</span><span class="ec">${e.kind==='trip'?'✈️ '+trips.find(t=>t.id===e.trip).place+' · '+e.cat.replace(/^\S+\s/,'')+' · '+e.to:e.cat}</span><b>${fmt(e.amt)}</b></button>`;
+const row=e=>`<button class="ex" data-ex="${e.id}"><span class="dt">${e.d?fd(e.d).slice(0,5):ml[+e.m.slice(5)-1]}</span><span class="ec">${e.kind==='trip'?'✈️ '+trips.find(t=>t.id===e.trip).place+' · '+e.cat.replace(/^\S+\s/,'')+' · '+e.to:e.cat+(e.sup?' · '+e.sup:'')}</span><b>${fmt(e.amt)}</b></button>`;
 const list=(a,n)=>a.length?a.sort((x,y)=>key(y).localeCompare(key(x))).slice(0,n||999).map(row).join(''):'<p class="hint">Sin gastos todavía</p>';
-const tripCard=t=>`<div class="ticket" data-p="trip" data-id="${t.id}"><div class="tm"><small>✈ Billete de avión</small><div class="dest">${fl(t.iso)}${t.place}</div><small>${t.country}</small><div style="margin-top:10px"><small>Fechas</small><br><b>${rng(t)} ${t.from.slice(0,4)}</b></div></div><div class="stub"><i class="bar"></i><b class="tt">${fmt0(tripTot(t.id))}</b></div></div>`;
+const tripCard=t=>`<div class="ticket" data-p="trip" data-id="${t.id}"><div class="tm"><small>✈ Billete de avión</small><div class="dest">${fl(t.iso)}${t.place}</div><small>${tcl(t)}</small><div style="margin-top:10px"><small>Fechas</small><br><b>${rng(t)} ${t.from.slice(0,4)}</b></div></div><div class="stub"><i class="bar"></i><b class="tt">${fmt0(tripTot(t.id))}</b></div></div>`;
 const el=y=>y<NY?12:y===NY?NM:1;
 const INC={Naranja:1000,Revolut:600},EX=[];
-const exs=(a,y,m)=>EX.filter(x=>x.acc===a&&(m?x.m===K(y,m):x.m.startsWith(y+'-')));
+const exs=(a,y,m)=>EX.filter(x=>!x.adj&&x.acc===a&&(m?x.m===K(y,m):x.m.startsWith(y+'-')));
+const adjs=(a,y,m)=>EX.filter(x=>x.adj&&x.acc===a&&x.m===K(y,m));
+function bstart(a){let k=null;const t=x=>{if(!k||x<k)k=x};E.forEach(e=>{if((e.kind==='casa'&&e.acc===a)||(e.kind==='trip'&&e.to===a))t(e.m)});EX.forEach(x=>{if(x.acc===a)t(x.m)});return k||K(NY,NM)}
+function bal(a,y,m){const st=bstart(a);if(K(y,m)<st)return null;let sy=+st.slice(0,4),sm=+st.slice(5),op=0;
+ for(let n=0;n<600;n++){const inc=INC[a]+sum(exs(a,sy,sm)),g=accT(a,sy,sm),aj=sum(adjs(a,sy,sm)),cl=op+inc-g+aj;
+  if(sy===y&&sm===m)return{op,inc,g,aj,cl,pre:cl-aj};op=cl;if(++sm>12){sm=1;sy++}}return null}
+const sg=v=>(v>0?'+':v<0?'−':'')+fmt(Math.abs(v)),balT=v=>`<b style="color:${v>=0?'#2E9E5B':'#E5484D'}">${fmt(v)}</b>`;
+const SUPS=['Lidl','Mercadona','Alimerka','Masymas'];
+function supBreak(items){const m={};let n=0,t=0;items.forEach(e=>{if(e.kind==='casa'&&e.cat==='Alimentación'){t+=e.amt;const k=e.sup||'';m[k]=(m[k]||0)+e.amt;if(e.sup)n++}});if(!n)return '';
+ const rows=Object.entries(m).sort((a,b)=>(a[0]===''?1:0)-(b[0]===''?1:0)||b[1]-a[1]);
+ return `<h3>Por supermercado</h3><div class="bcard" style="margin:0 0 8px;padding:6px 14px">${rows.map(([k,v])=>`<div class="sbk"><span>🛒 ${k||'Sin indicar'}<small>${Math.round(v/t*100)}%</small></span><b>${fmt0(v)}</b></div>`).join('')}</div>`}
 const cm=(a,c,y,m)=>c==='Viajes'?sum(trp(a,y,m)):sum(cas(a,y,m).filter(x=>x.cat===c));
 const past=[];for(let y=NY-1;y<=NY;y++)for(let m=1;m<=12;m++)if(y<NY||m<NM)past.push([y,m]);
 const hAvg=(a,c)=>past.reduce((s,[y,m])=>s+(c?cm(a,c,y,m):accT(a,y,m)),0)/past.length;
@@ -252,6 +270,7 @@ const badge=(cur,base)=>{if(!(base>0))return '<small class="bd" style="opacity:.
 const balC=b=>`<b style="color:${b>=0?'#2E9E5B':'#E5484D'}">${b>=0?'+':''}${fmt0(b)}</b>`;
 function trend(v,avg,col,l0,l1){const W=340,H=130,P=12,mx=Math.max(...v,avg)*1.12||1,n=v.length,X=i=>P+i*(W-2*P)/Math.max(1,n-1),Y=x=>H-22-x/mx*(H-34),pts=v.map((x,i)=>X(i)+','+Y(x)).join(' ');
  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;background:var(--navbg);border-radius:20px;display:block"><polygon points="${X(0)},${H-22} ${pts} ${X(n-1)},${H-22}" fill="${col}" opacity=".18"/><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2.5" stroke-linejoin="round"/><line x1="${P}" x2="${W-P}" y1="${Y(avg)}" y2="${Y(avg)}" stroke="currentColor" stroke-dasharray="4 4" opacity=".55"/><text x="${W-P}" y="${Y(avg)-4}" font-size="9" text-anchor="end" fill="currentColor">Media ${fmt0(avg)}</text><text x="${P}" y="${H-6}" font-size="9" fill="currentColor" opacity=".7">${l0}</text><text x="${W-P}" y="${H-6}" font-size="9" text-anchor="end" fill="currentColor" opacity=".7">${l1}</text></svg>`}
+function balList(a,y){const n=el(y);let h='';for(let m=1;m<=n;m++){const b=bal(a,y,m);if(!b)continue;h+=`<button class="ex" data-p="accmonth" data-acc="${a}" data-y="${y}" data-mo="${m}"><span class="dt">${ml[m-1]}</span><span class="ec">Inicial ${fmt0(b.op)}${b.aj?' · ajuste '+sg(b.aj):''}</span>${balT(b.cl)}</button>`}return h||'<p class="hint">Sin movimientos todavía</p>'}
 function accDash(a,y,emb){const col=a==='Naranja'?COL.N:COL.R,tot=accT(a,y),ms=Array.from({length:12},(_,i)=>accT(a,y,i+1)),mx=Math.max(...ms),n=el(y),cs=cats(a,y),ct=sum2(cs);
  const inc=INC[a]*n+sum(exs(a,y)),all=[...past,[NY,NM]],vals=all.map(([yy,m])=>accT(a,yy,m)),av=hAvg(a),hv=past.map(([yy,m])=>accT(a,yy,m)),lb=([yy,m])=>ml[m-1]+' '+String(yy).slice(2),imx=hv.indexOf(Math.max(...hv)),imn=hv.indexOf(Math.min(...hv));
  return `<h1>${a==='Naranja'?'🟠':'⚫'} Gastos ${a}</h1>`+(emb?`<div class="yl">${y}</div>`:ys(y))+
@@ -261,13 +280,15 @@ function accDash(a,y,emb){const col=a==='Naranja'?COL.N:COL.R,tot=accT(a,y),ms=A
  `<h3>Categorías</h3><p class="hint">% = media mensual de ${y} frente a la media histórica de cada categoría</p>`+
  donut(cs.map((c,i)=>({n:c.e+' '+c.n,sh:ct?Math.round(c.v/ct*100)+'% del total':'',v:c.v,c:PAL[i],b:c.n==='Viajes'?'<small class="bd" style="opacity:.5">—</small>':badge(yAvg(a,c.n,y),hAvg(a,c.n)),attr:`data-p="cat" data-acc="${a}" data-y="${y}" data-c="${c.n}"`})))+
  `<h3>Media histórica</h3><div class="st"><div><small>Media mensual</small><b>${fmt0(av)}</b></div><div><small>Mes más caro</small><b>${fmt0(hv[imx])}</b><small>${lb(past[imx])}</small></div><div><small>Mes más barato</small><b>${fmt0(hv[imn])}</b><small>${lb(past[imn])}</small></div></div><h3>Tendencia</h3>`+trend(vals,av,col,lb(all[0]),lb(all[all.length-1]))+
- `<h3>Balance de ${y}</h3><div class="det"><div><small>Ingresos (fijos + extra)</small><b>${fmt0(inc)}</b></div><div><small>Gastos</small><b>${fmt0(tot)}</b></div><div><small>Balance</small>${balC(inc-tot)}</div></div><h3>Últimos gastos</h3>`+list([...cas(a,y),...trp(a,y)],10)}
+ `<h3>Saldo mes a mes</h3>${balList(a,y)}<h3>Balance de ${y}</h3><div class="det"><div><small>Ingresos (fijos + extra)</small><b>${fmt0(inc)}</b></div><div><small>Gastos</small><b>${fmt0(tot)}</b></div><div><small>Balance</small>${balC(inc-tot)}</div></div><h3>Últimos gastos</h3>`+list([...cas(a,y),...trp(a,y)],10)}
+function balCard(a,y,mo){const b=bal(a,y,mo);if(!b)return `<div class="bal"><h3>💰 Saldo de la cuenta</h3><p class="hint">Aún no hay movimientos en esta cuenta hasta ${months[mo-1]}.</p></div>`;
+ return `<div class="bal"><h3>💰 Saldo de la cuenta</h3><div class="r"><span>Saldo inicial del mes</span><b>${fmt(b.op)}</b></div><div class="r"><span>Ingresos</span><b style="color:#2E9E5B">+${fmt(b.inc)}</b></div><div class="r"><span>Gastos</span><b style="color:#E5484D">−${fmt(b.g)}</b></div>${b.aj?`<div class="r"><span>Ajuste manual</span><b>${sg(b.aj)}</b></div>`:''}<div class="r t"><span>Saldo a fin de mes</span>${balT(b.cl)}</div><p class="hint" style="margin:6px 0 0">Pasa como saldo inicial al mes siguiente.</p><button class="yb" data-adj="${a}" data-y="${y}" data-mo="${mo}">⚖️ Ajustar para cuadrar con el saldo real</button></div>`}
 function accMonth(a,y,mo,sh){const g=accT(a,y,mo),ex=exs(a,y,mo),xt=sum(ex),inc=INC[a]+xt,cs=cats(a,y,mo);
- return `<h1>${a==='Naranja'?'🟠':'⚫'} ${sh?'Gastos '+a:a+' · '+months[mo-1]+' '+y}</h1><div class="st"><div><small>Gastos del mes</small><b>${fmt0(g)}</b></div><div><small>Ingresos mensuales</small><b>${fmt0(INC[a])}</b></div><button data-xa="${a}" data-y="${y}" data-mo="${mo}"><small>Ingresos extra ＋</small><b>${fmt0(xt)}</b></button></div><div class="det" style="margin-top:8px"><div><small>Balance del mes</small>${balC(inc-g)}</div></div>`+
+ return `<h1>${a==='Naranja'?'🟠':'⚫'} ${sh?'Gastos '+a:a+' · '+months[mo-1]+' '+y}</h1><div class="st"><div><small>Gastos del mes</small><b>${fmt0(g)}</b></div><div><small>Ingresos mensuales</small><b>${fmt0(INC[a])}</b></div><button data-xa="${a}" data-y="${y}" data-mo="${mo}"><small>Ingresos extra ＋</small><b>${fmt0(xt)}</b></button></div><div class="det" style="margin-top:8px"><div><small>Balance del mes</small>${balC(inc-g)}</div></div>`+balCard(a,y,mo)+
  (ex.length?`<h3>Ingresos extra</h3>`+ex.map(x=>`<div class="ex" style="cursor:default"><span class="ec">${x.obs||'Ingreso extra'}</span><b>${fmt(x.amt)}</b></div>`).join(''):'')+
  `<h3>Categorías</h3><p class="hint">% frente a ${months[mo-1]} de ${y-1}</p>`+donut(cs.map((c,i)=>({n:c.e+' '+c.n,v:c.v,c:PAL[i],b:c.n==='Viajes'?'<small class="bd" style="opacity:.5">—</small>':badge(c.v,cm(a,c.n,y-1,mo)),attr:`data-p="cat" data-acc="${a}" data-y="${y}" data-c="${c.n}"`})))+`<h3>Gastos del mes</h3>`+list([...cas(a,y,mo),...trp(a,y,mo)])}
 function catScr(a,y,c){const x=c==='Viajes'?trp(a,y):cas(a,y).filter(e=>e.cat===c);
- return `<h1>${c} · ${a} ${y}</h1><div class="st"><div><small>Total ${y}</small><b>${fmt0(sum(x))}</b></div></div><h3>Evolución mensual</h3>`+bars(Array.from({length:12},(_,i)=>[{v:sum(x.filter(e=>e.m===K(y,i+1))),c:a==='Naranja'?COL.N:COL.R}]),()=>'')+`<h3>Gastos</h3>`+list(x)}
+ return `<h1>${c} · ${a} ${y}</h1><div class="st"><div><small>Total ${y}</small><b>${fmt0(sum(x))}</b></div></div><h3>Evolución mensual</h3>`+bars(Array.from({length:12},(_,i)=>[{v:sum(x.filter(e=>e.m===K(y,i+1))),c:a==='Naranja'?COL.N:COL.R}]),()=>'')+supBreak(x)+`<h3>Gastos</h3>`+list(x)}
 function resMain(y){const e=el(y);let T=0,P=0;for(let i=1;i<=e;i++){T+=real(y,i);P+=real(y-1,i)}
  const ms=Array.from({length:12},(_,i)=>[{v:sum(cas('Naranja',y,i+1)),c:COL.N},{v:sum(cas('Revolut',y,i+1)),c:COL.R},{v:sum(trp(null,y,i+1)),c:COL.V}]);
  return `<h1>💰 Resumen</h1>${ys(y)}<div class="total"><div><span>Gasto total ${y}</span>${P>0?`<small class="cmp">${T>=P?'▲':'▼'} ${Math.abs(Math.round((T-P)/P*100))}% frente al mismo periodo de ${y-1}</small>`:''}</div><b>${fmt0(T)}</b></div><h3>Evolución mensual</h3>`+
@@ -280,7 +301,7 @@ const LANDSVG=`<g fill="var(--butter)" stroke="var(--cs)" stroke-width=".5" stro
 const GRAT=(()=>{let g='';for(let i=-150;i<=150;i+=30)g+=`M${i+180} 0V180`;for(let i=-60;i<=60;i+=30)g+=`M0 ${90-i}H360`;return `<path d="${g}" stroke="var(--ink)" stroke-opacity=".08" stroke-width=".4" fill="none"/>`})();
 const CC={ES:[40,-3.7],FR:[46.6,2.4],IT:[42.8,12.5],PT:[39.6,-8],DE:[51,10],NL:[52.2,5.3],BE:[50.6,4.6],GB:[54,-2],IE:[53,-8],AT:[47.5,14.5],PL:[52,19],GR:[39,22],HU:[47,19.5],CZ:[49.8,15.5],MA:[31.8,-7],JP:[36,138],US:[39,-98],MX:[23,-102],AR:[-34,-64],BR:[-10,-52],TH:[15,101],IS:[65,-18],NO:[61,9],SE:[62,15],DK:[56,10],CH:[46.8,8.2],HR:[45.1,15.2],TR:[39,35]};
 const CITY=Object.fromEntries('Álava:42.85,-2.67;Albacete:39,-1.86;Alicante:38.35,-0.48;Almería:36.84,-2.46;Asturias:43.36,-5.85;Ávila:40.66,-4.7;Badajoz:38.88,-6.97;Baleares:39.57,2.65;Barcelona:41.39,2.17;Burgos:42.34,-3.7;Cáceres:39.47,-6.37;Cádiz:36.53,-6.29;Cantabria:43.46,-3.8;Castellón:39.99,-0.05;Ciudad Real:38.99,-3.93;Córdoba:37.89,-4.78;A Coruña:43.37,-8.4;Cuenca:40.07,-2.13;Girona:41.98,2.82;Granada:37.18,-3.6;Guadalajara:40.63,-3.17;Gipuzkoa:43.32,-1.98;Huelva:37.26,-6.95;Huesca:42.14,-0.41;Jaén:37.78,-3.79;León:42.6,-5.57;Lleida:41.62,0.62;Lugo:43.01,-7.56;Madrid:40.42,-3.7;Málaga:36.72,-4.42;Murcia:37.99,-1.13;Navarra:42.82,-1.64;Ourense:42.34,-7.86;Palencia:42.01,-4.53;Las Palmas:28.12,-15.43;Pontevedra:42.43,-8.64;La Rioja:42.47,-2.45;Salamanca:40.97,-5.66;Santa Cruz de Tenerife:28.47,-16.25;Segovia:40.95,-4.12;Sevilla:37.39,-5.98;Soria:41.76,-2.47;Tarragona:41.12,1.25;Teruel:40.34,-1.11;Toledo:39.86,-4.02;Valencia:39.47,-0.38;Valladolid:41.65,-4.72;Bizkaia:43.26,-2.93;Zamora:41.5,-5.75;Zaragoza:41.65,-0.89;Oviedo:43.36,-5.85;Gijón:43.53,-5.66;Avilés:43.55,-5.92;Santander:43.46,-3.8;Bilbao:43.26,-2.93;San Sebastián:43.32,-1.98;Santiago de Compostela:42.88,-8.54;Marbella:36.51,-4.88;Benidorm:38.54,-0.13;Sitges:41.24,1.81;Ronda:36.74,-5.17;Ibiza:38.91,1.43;Palma de Mallorca:39.57,2.65;Vigo:42.24,-8.72;París:48.86,2.35;Niza:43.7,7.26;Roma:41.9,12.5;Florencia:43.77,11.25;Venecia:45.44,12.32;Milán:45.46,9.19;Lisboa:38.72,-9.14;Oporto:41.15,-8.61;Berlín:52.52,13.4;Múnich:48.14,11.58;Ámsterdam:52.37,4.9;Bruselas:50.85,4.35;Brujas:51.21,3.22;Londres:51.51,-0.13;Edimburgo:55.95,-3.19;Dublín:53.35,-6.26;Viena:48.21,16.37;Praga:50.08,14.44;Budapest:47.5,19.04;Cracovia:50.06,19.94;Atenas:37.98,23.73;Estambul:41.01,28.98;Marrakech:31.63,-8;Tokio:35.68,139.69;Kioto:35.01,135.77;Nueva York:40.71,-74;Miami:25.76,-80.19;Ciudad de México:19.43,-99.13;Buenos Aires:-34.6,-58.38;Reikiavik:64.15,-21.94;Copenhague:55.68,12.57'.split(';').map(s=>{const i=s.lastIndexOf(':');return[s.slice(0,i),s.slice(i+1).split(',').map(Number)]}));
-const spot=t=>CITY[t.place]||CC[t.iso]||[0,0];
+const spot=t=>t.lat!=null&&t.lon!=null?[t.lat,t.lon]:CITY[t.place]||CITY[t.prov]||CC[t.iso]||[0,0];
 const AR=1.7;let MPV={x:0,y:-16,w:360,mode:'pan',sel:null};
 function clampV(){const v=MPV;v.w=Math.min(360,Math.max(6,v.w));const h=v.w/AR;v.x=Math.min(360-v.w,Math.max(0,v.x));v.y=Math.min(Math.max(-20,196-h),Math.max(-20,v.y))}
 function scalePins(){const k=MPV.w/360*1.4,lab=MPV.w<=110;document.querySelectorAll('#wm .pin').forEach(g=>{g.setAttribute('transform',`translate(${g.dataset.x} ${g.dataset.y}) scale(${k})`);g.querySelector('text').style.display=lab?'':'none'})}
@@ -322,7 +343,7 @@ const tcats=x=>TC.map(([e,n],i)=>({n:e+' '+n,v:sum(x.filter(k=>k.cat===e+' '+n))
 function viaMonth(y,mo){const x=trp(null,y,mo),ids=[...new Set(x.map(e=>e.trip))];
  return `<h1>✈️ Viajes · ${months[mo-1]} ${y}</h1><div class="st"><div><small>Total del mes</small><b>${fmt0(sum(x))}</b></div></div><h3>Viajes</h3>`+(ids.length?ids.map(i=>tripCard(trips.find(t=>t.id===i))).join(''):'<p class="hint">Sin viajes este mes</p>')+`<h3>Categorías</h3>`+donut(tcats(x))}
 function tripScr(id){const t=trips.find(t=>t.id===id),x=E.filter(e=>e.trip===id);
- return `<h1 style="display:flex;align-items:center;gap:10px">${fl(t.iso)}${t.place}</h1><p class="hint" style="margin-top:-6px">${rng(t)} ${t.from.slice(0,4)} · ${t.country}</p><div class="st"><div><small>Total del viaje</small><b>${fmt0(sum(x))}</b></div><div style="grid-column:span 2"><small>Repercute en Casa</small><b>${fmt0(sum(x.filter(e=>e.to==='Naranja'||e.to==='Revolut')))}</b></div></div><h3>Por categoría</h3>`+donut(tcats(x))+`<h3>¿De dónde salió el dinero?</h3>`+donut([['🟠 Naranja',COL.N],['⚫ Revolut',COL.R],['👩 Alba','#E9A0A0'],['👨 David','#8FBEDC']].map(([n,c])=>({n,c,v:sum(x.filter(e=>e.to===n.slice(3)))})))+`<h3>Gastos del viaje</h3>`+x.sort((a,b)=>key(a).localeCompare(key(b))).map(row).join('')}
+ return `<h1 style="display:flex;align-items:center;gap:10px">${fl(t.iso)}${t.place}</h1><p class="hint" style="margin-top:-6px">${rng(t)} ${t.from.slice(0,4)} · ${tcl(t)}</p><div class="st"><div><small>Total del viaje</small><b>${fmt0(sum(x))}</b></div><div style="grid-column:span 2"><small>Repercute en Casa</small><b>${fmt0(sum(x.filter(e=>e.to==='Naranja'||e.to==='Revolut')))}</b></div></div><h3>Por categoría</h3>`+donut(tcats(x))+`<h3>¿De dónde salió el dinero?</h3>`+donut([['🟠 Naranja',COL.N],['⚫ Revolut',COL.R],['👩 Alba','#E9A0A0'],['👨 David','#8FBEDC']].map(([n,c])=>({n,c,v:sum(x.filter(e=>e.to===n.slice(3)))})))+`<h3>Gastos del viaje</h3>`+x.sort((a,b)=>key(a).localeCompare(key(b))).map(row).join('')}
 const tot=()=>{const{y,m}=HM,n=accT('Naranja',y,m),r=accT('Revolut',y,m);return{n,r,v:sum(trp(null,y,m)),casa:n+r}};
 const AVM={1:'m',3:'m'};
 function mhead(yb){const cur=HM.y===NY&&HM.m===NM;
@@ -343,7 +364,7 @@ function tap(t){if(t.classList.contains('go'))return;const i=+t.dataset.go;
  if(!t.querySelector('.pos'))return nav();
  const s=t.querySelector('.scr');if(navigator.vibrate)navigator.vibrate(15);t.classList.add('go');
  setTimeout(()=>{s.textContent='✓ Aceptado';s.classList.add('ok')},560);setTimeout(nav,1250)}
-$('#main').onclick=e=>{const t=e.target.closest('[data-hm],[data-yr],[data-p],[data-bk],[data-ex],[data-go],[data-xa],[data-seg],[data-demo],[data-av]');if(!t)return;const d=t.dataset;
+$('#main').onclick=e=>{const t=e.target.closest('[data-hm],[data-yr],[data-p],[data-bk],[data-ex],[data-go],[data-xa],[data-adj],[data-seg],[data-demo],[data-av]');if(!t)return;const d=t.dataset;
  if(d.hm){const v=d.hm;if(v==='-1'||v==='1'){let m=HM.m+ +v,y=HM.y;if(m<1){m=12;y--}if(m>12){m=1;y++}HM.m=m;HM.y=y}else if(v==='open'){HM.open=!HM.open;HM.py=HM.y}else if(v==='now'){HM={y:NY,m:NM,open:false,py:NY}}else if(v==='py-')HM.py--;else if(v==='py+')HM.py++;else if(v==='pick'){HM.y=HM.py;HM.m=+d.mo;HM.open=false}render()}
  else if(d.av){AVM[tab]=d.av==='m'?'m':'y';HM.open=false;ST[tab]=[];if(d.av!=='m')YR[tab]=HM.y;render()}
  else if(d.go!==undefined)tap(t);
@@ -352,6 +373,7 @@ $('#main').onclick=e=>{const t=e.target.closest('[data-hm],[data-yr],[data-p],[d
  else if(d.ex)openDetail(d.ex);
  else if(d.p)push({n:d.p,acc:d.acc,y:+d.y,mo:+d.mo,cat:d.c,id:d.id});
  else if(d.xa)openExtra(d.xa,+d.y,+d.mo);
+ else if(d.adj)openAdj(d.adj,+d.y,+d.mo);
  else if(d.seg!==undefined)segSel(t);
  else if(d.demo){DEMO=d.demo==='on';applyData();refresh()}};
 const BAV='<div class="bsp bav ok"></div>';
@@ -387,7 +409,7 @@ const plHTML=()=>[['c','Este mes'],['p','Mes pasado'],['3','3 meses'],['y','Año
 function bCtl(){bbuild();const cats=bCats().filter(c=>BD[c]&&Object.values(BD[c]).some(v=>v>0));
  return `<div class="pl">${plHTML()}</div><div class="lbl2">Cuenta</div><div class="pl">${ACCS.map(([k,t])=>`<button data-ba="${k}" class="${k===BOT.acc?'on':''}">${t}</button>`).join('')}</div>`+
  `<div class="lbl2">Concepto</div><input id="bq" class="bs" type="search" autocomplete="off" placeholder="🔍 Busca un concepto, comercio o viaje…" value="${escH(BOT.q)}"><div class="pl" id="bchips"><button data-bc="" class="${!BOT.cat&&!BOT.q?'on':''}">Todos</button>${cats.map(c=>`<button data-bc="${escH(c)}" class="${BOT.cat===c?'on':''}">${bem(c)} ${escH(c)}</button>`).join('')}</div>`}
-function bMatch(e,q){const t=norm([e.obs||'',bCatOf(e),e.kind==='trip'?((trips.find(t=>t.id===e.trip)||{}).place||''):'',e.kind==='trip'?e.to:e.acc].join(' '));return q.every(w=>t.includes(w))}
+function bMatch(e,q){const t=norm([e.obs||'',e.sup||'',bCatOf(e),e.kind==='trip'?((trips.find(t=>t.id===e.trip)||{}).place||''):'',e.kind==='trip'?e.to:e.acc].join(' '));return q.every(w=>t.includes(w))}
 function bConcept(){bbuild();const S=bScope();let items,title;
  if(BOT.cat){items=S.filter(e=>bCatOf(e)===BOT.cat);title=(bem(BOT.cat)+' '+BOT.cat).trim()}
  else if(BOT.q.trim()){const q=norm(BOT.q.trim()).split(/\s+/);items=S.filter(e=>bMatch(e,q));title='🔍 «'+escH(BOT.q.trim())+'»'}
@@ -397,11 +419,11 @@ function bConcept(){bbuild();const S=bScope();let items,title;
  const per=bper(BOT.p),n=per.length,P=per.reduce((s,[y,m])=>s+(byM[K(y,m)]||0),0),H=Math.max(1,past.length),h=past.reduce((s,[y,m])=>s+(byM[K(y,m)]||0),0)/H;
  const Tp=per.reduce((s,[y,m])=>s+bmon(y,m),0),L=l12((y,m)=>byM[K(y,m)]||0),X=extremes(L),tot=items.reduce((s,e)=>s+e.amt,0);
  const last=[...items].sort((a,b)=>key(b).localeCompare(key(a))).slice(0,8);
- const lab=e=>e.kind==='trip'?'✈️ '+((trips.find(t=>t.id===e.trip)||{}).place||'Viaje')+' · '+tcn(e):e.cat;
+ const lab=e=>e.kind==='trip'?'✈️ '+((trips.find(t=>t.id===e.trip)||{}).place||'Viaje')+' · '+tcn(e):e.cat+(e.sup?' · '+e.sup:'');
  const pc=h>0?Math.round((P/n/h-1)*100):null;
  const txt=P<=0?`En ${blab(BOT.p)} no ha habido gasto en este concepto.`:`En ${blab(BOT.p)}: <b>${fmt0(P)}</b>${n>1?` (${fmt0(P/n)}/mes)`:''}${Tp>0?`, un ${Math.round(P/Tp*100)}% del gasto${ascope()}`:''}.${pc!==null&&h>=5?` Frente a tu media de ${fmt0(h)}/mes: <b style="color:${pc>0?'#E5484D':'#2E9E5B'}">${pc>0?'+':''}${pc}%</b>.`:''}`;
  return `<div class="bcard"><h4>${title}</h4><div class="st"><div><small>Total histórico</small><b>${fmt0(tot)}</b></div><div><small>Media/mes</small><b>${fmt0(h)}</b></div><div><small>Gastos</small><b>${items.length}</b></div></div><p class="sm" style="margin-top:10px;font-size:13px;opacity:1">${txt}</p>`+
- `<p class="sm">Últimos 12 meses${X.mx?` · más alto: <b>${months[X.mx[1]-1]}</b> (${fmt0(X.mx[2])})`:''}</p>${mbars(L,X.mx,null)}<p class="sm" style="margin-top:8px">Últimos gastos</p>`+
+ `<p class="sm">Últimos 12 meses${X.mx?` · más alto: <b>${months[X.mx[1]-1]}</b> (${fmt0(X.mx[2])})`:''}</p>${mbars(L,X.mx,null)}${supBreak(items).replace('<h3>','<p class="sm" style="margin-top:10px"><b>').replace('</h3>','</b></p>')}<p class="sm" style="margin-top:8px">Últimos gastos</p>`+
  last.map(e=>`<div class="ex2"><span>${e.d?fd(e.d).slice(0,5):ml[+e.m.slice(5)-1]} · ${escH(lab(e))}${e.obs?`<small>${escH(e.obs)}</small>`:''}</span><b>${fmt(e.amt)}</b></div>`).join('')+`</div>`}
 function botRest(){const p=BOT.p,D=botCalc(p),cur=p==='c',a=BOT.acc;
  if(!E.length||D.tot<=0&&!cur)return `<div class="bcard"><p class="hint">Todavía no hay gastos de ${blab(p)}${ascope()} para analizar. Cuando añadáis algunos (o pulses «Ver ejemplo» en Inicio) os cuento en qué se va el dinero y dónde podéis ahorrar.</p></div>`;
@@ -549,10 +571,68 @@ const FL={ES:'linear-gradient(#c60b1e 25%,#ffc400 25% 75%,#c60b1e 75%)',FR:'line
 const emo=c=>String.fromCodePoint(...[...c].map(x=>127397+x.charCodeAt()));
 const fl=c=>FL[c]?`<span class="sw" style="background:${FL[c]}"></span>`:emo(c);
 const P=[];
-'Álava,Albacete,Alicante,Almería,Asturias,Ávila,Badajoz,Baleares,Barcelona,Burgos,Cáceres,Cádiz,Cantabria,Castellón,Ciudad Real,Córdoba,A Coruña,Cuenca,Girona,Granada,Guadalajara,Gipuzkoa,Huelva,Huesca,Jaén,León,Lleida,Lugo,Madrid,Málaga,Murcia,Navarra,Ourense,Palencia,Las Palmas,Pontevedra,La Rioja,Salamanca,Santa Cruz de Tenerife,Segovia,Sevilla,Soria,Tarragona,Teruel,Toledo,Valencia,Valladolid,Bizkaia,Zamora,Zaragoza'.split(',').forEach(n=>P.push([n,'ES','España','Provincia']));
-'Oviedo,Gijón,Avilés,Santander,Bilbao,San Sebastián,Santiago de Compostela,Marbella,Benidorm,Sitges,Ronda,Ibiza,Palma de Mallorca,Vigo'.split(',').forEach(n=>P.push([n,'ES','España','Municipio']));
-'París:FR:Francia,Niza:FR:Francia,Roma:IT:Italia,Florencia:IT:Italia,Venecia:IT:Italia,Milán:IT:Italia,Lisboa:PT:Portugal,Oporto:PT:Portugal,Berlín:DE:Alemania,Múnich:DE:Alemania,Ámsterdam:NL:Países Bajos,Bruselas:BE:Bélgica,Brujas:BE:Bélgica,Londres:GB:Reino Unido,Edimburgo:GB:Reino Unido,Dublín:IE:Irlanda,Viena:AT:Austria,Praga:CZ:Chequia,Budapest:HU:Hungría,Cracovia:PL:Polonia,Atenas:GR:Grecia,Estambul:TR:Turquía,Marrakech:MA:Marruecos,Tokio:JP:Japón,Kioto:JP:Japón,Nueva York:US:Estados Unidos,Miami:US:Estados Unidos,Ciudad de México:MX:México,Buenos Aires:AR:Argentina,Reikiavik:IS:Islandia,Copenhague:DK:Dinamarca'.split(',').forEach(s=>{const[a,b,c]=s.split(':');P.push([a,b,c,'Ciudad'])});
-'España:ES,Francia:FR,Italia:IT,Portugal:PT,Alemania:DE,Países Bajos:NL,Bélgica:BE,Reino Unido:GB,Irlanda:IE,Austria:AT,Polonia:PL,Grecia:GR,Hungría:HU,Chequia:CZ,Marruecos:MA,Japón:JP,Estados Unidos:US,México:MX,Argentina:AR,Brasil:BR,Tailandia:TH,Islandia:IS,Noruega:NO,Suecia:SE,Dinamarca:DK,Suiza:CH,Croacia:HR,Turquía:TR'.split(',').forEach(s=>{const[a,b]=s.split(':');P.push([a,b,a,'País'])});
+const ESC=`Sevilla=Sevilla/37.39/-5.98|Dos Hermanas/37.28/-5.92|Écija/37.54/-5.08|Carmona/37.47/-5.64|Osuna/37.24/-5.10|Utrera/37.18/-5.78
+Málaga=Málaga/36.72/-4.42|Marbella/36.51/-4.88|Fuengirola/36.54/-4.62|Torremolinos/36.62/-4.50|Benalmádena/36.60/-4.52|Estepona/36.43/-5.15|Mijas/36.60/-4.64|Nerja/36.75/-3.88|Ronda/36.74/-5.17|Antequera/37.02/-4.56|Vélez-Málaga/36.78/-4.10|Torrox/36.76/-3.95
+Córdoba=Córdoba/37.89/-4.78|Lucena/37.41/-4.48|Priego de Córdoba/37.44/-4.20|Montilla/37.59/-4.64
+Granada=Granada/37.18/-3.60|Motril/36.75/-3.52|Almuñécar/36.73/-3.69|Guadix/37.30/-3.14|Baza/37.49/-2.77|Salobreña/36.74/-3.59
+Jaén=Jaén/37.78/-3.79|Úbeda/38.01/-3.37|Baeza/37.99/-3.47|Linares/38.09/-3.64|Cazorla/37.91/-3.00
+Almería=Almería/36.84/-2.46|Roquetas de Mar/36.76/-2.61|El Ejido/36.78/-2.81|Mojácar/37.14/-1.85|Níjar/36.97/-2.21
+Huelva=Huelva/37.26/-6.95|Punta Umbría/37.18/-6.97|Isla Cristina/37.20/-7.32|Matalascañas/37.00/-6.55|Aracena/37.89/-6.56|Ayamonte/37.21/-7.41
+Cádiz=Cádiz/36.53/-6.29|Jerez de la Frontera/36.69/-6.14|Algeciras/36.13/-5.45|Tarifa/36.01/-5.60|Chiclana de la Frontera/36.42/-6.15|Conil de la Frontera/36.28/-6.09|Vejer de la Frontera/36.25/-5.97|El Puerto de Santa María/36.59/-6.23|Sanlúcar de Barrameda/36.78/-6.35|San Fernando/36.46/-6.20|La Línea de la Concepción/36.17/-5.35|Zahara de los Atunes/36.14/-5.84|Arcos de la Frontera/36.75/-5.81|Rota/36.62/-6.35
+Zaragoza=Zaragoza/41.65/-0.89|Calatayud/41.35/-1.64|Tarazona/41.90/-1.72|Ejea de los Caballeros/42.13/-1.14
+Huesca=Huesca/42.14/-0.41|Jaca/42.57/-0.55|Barbastro/42.04/0.13|Benasque/42.60/0.52|Aínsa/42.42/0.14|Monzón/41.91/0.19
+Teruel=Teruel/40.34/-1.11|Albarracín/40.41/-1.44|Alcañiz/41.05/-0.13
+Asturias=Oviedo/43.36/-5.85|Gijón/43.53/-5.66|Avilés/43.55/-5.92|Llanes/43.42/-4.75|Cangas de Onís/43.35/-5.12|Ribadesella/43.46/-5.06|Luarca/43.54/-6.54|Cudillero/43.56/-6.15|Villaviciosa/43.48/-5.43|Mieres/43.25/-5.77|Langreo/43.30/-5.69|Lastres/43.51/-5.27|Tapia de Casariego/43.57/-6.94|Covadonga/43.31/-5.06|Arenas de Cabrales/43.30/-4.82|Taramundi/43.35/-7.10|Navia/43.54/-6.73|Candás/43.59/-5.76|Pola de Siero/43.39/-5.66|Pravia/43.49/-6.12|Salinas/43.58/-5.95|Cabo Peñas/43.65/-5.85
+Baleares=Palma de Mallorca/39.57/2.65|Ibiza/38.91/1.43|Mahón/39.89/4.27|Ciutadella de Menorca/40.00/3.84|Sóller/39.77/2.71|Alcúdia/39.85/3.12|Pollença/39.88/3.02|Santa Eulària des Riu/38.98/1.53|Sant Antoni de Portmany/38.98/1.30|Formentera/38.70/1.45|Manacor/39.57/3.21|Cala d'Or/39.37/3.22|Cala Ratjada/39.71/3.46|Magaluf/39.50/2.53
+Las Palmas=Las Palmas de Gran Canaria/28.12/-15.43|Maspalomas/27.76/-15.59|Telde/27.99/-15.42|Arrecife/28.96/-13.55|Puerto del Rosario/28.50/-13.86|Corralejo/28.73/-13.87|Playa Blanca/28.86/-13.83|Costa Teguise/29.00/-13.49|Morro Jable/28.05/-14.35|Puerto del Carmen/28.92/-13.66|Mogán/27.88/-15.72|Agaete/28.10/-15.70
+Santa Cruz de Tenerife=Santa Cruz de Tenerife/28.47/-16.25|San Cristóbal de La Laguna/28.49/-16.31|Puerto de la Cruz/28.41/-16.55|Adeje/28.12/-16.73|Los Cristianos/28.05/-16.71|Playa de las Américas/28.07/-16.73|Santa Cruz de La Palma/28.68/-17.76|San Sebastián de La Gomera/28.09/-17.11|Valverde/27.81/-17.91|Los Llanos de Aridane/28.66/-17.92|Costa Adeje/28.08/-16.73|Garachico/28.37/-16.76|Masca/28.30/-16.84
+Cantabria=Santander/43.46/-3.80|Santillana del Mar/43.39/-4.11|Comillas/43.39/-4.29|Laredo/43.41/-3.41|Castro Urdiales/43.38/-3.22|Torrelavega/43.35/-4.05|Potes/43.15/-4.62|Santoña/43.44/-3.46|Noja/43.49/-3.53|Suances/43.43/-4.04|Reinosa/43.00/-4.14|San Vicente de la Barquera/43.38/-4.40|Fuente Dé/43.15/-4.82|Liérganes/43.35/-3.74
+Valladolid=Valladolid/41.65/-4.72|Peñafiel/41.60/-4.12|Medina del Campo/41.31/-4.91|Medina de Rioseco/41.88/-5.04
+Burgos=Burgos/42.34/-3.70|Aranda de Duero/41.67/-3.69|Miranda de Ebro/42.69/-2.95|Covarrubias/42.06/-3.52|Frías/42.76/-3.30|Lerma/42.03/-3.75|Santo Domingo de Silos/41.97/-3.42|Oña/42.73/-3.42
+León=León/42.60/-5.57|Ponferrada/42.55/-6.60|Astorga/42.46/-6.06|Villablino/42.94/-6.32|Sahagún/42.37/-5.03|Las Médulas/42.46/-6.77
+Salamanca=Salamanca/40.97/-5.66|Ciudad Rodrigo/40.60/-6.53|La Alberca/40.49/-6.11|Béjar/40.39/-5.76|Candelario/40.37/-5.74|Miranda del Castañar/40.47/-5.99
+Segovia=Segovia/40.95/-4.12|La Granja de San Ildefonso/40.90/-4.01|Sepúlveda/41.30/-3.75|Cuéllar/41.40/-4.31|Pedraza/41.14/-3.81
+Ávila=Ávila/40.66/-4.70|Arenas de San Pedro/40.21/-5.09|Arévalo/41.06/-4.72|El Barco de Ávila/40.35/-5.52
+Soria=Soria/41.76/-2.47|El Burgo de Osma/41.59/-3.07|Almazán/41.49/-2.53|San Esteban de Gormaz/41.57/-3.21
+Zamora=Zamora/41.50/-5.75|Benavente/42.00/-5.68|Toro/41.52/-5.39|Puebla de Sanabria/42.05/-6.63
+Palencia=Palencia/42.01/-4.53|Aguilar de Campoo/42.79/-4.26|Frómista/42.27/-4.41|Carrión de los Condes/42.34/-4.60
+Toledo=Toledo/39.86/-4.02|Talavera de la Reina/39.96/-4.83|Consuegra/39.46/-3.61|Orgaz/39.64/-3.89|Oropesa/39.92/-5.17|Illescas/40.12/-3.84
+Albacete=Albacete/39.00/-1.86|Hellín/38.51/-1.70|Almansa/38.87/-1.10|Alcalá del Júcar/39.19/-1.43
+Ciudad Real=Ciudad Real/38.99/-3.93|Alcázar de San Juan/39.39/-3.21|Almagro/38.89/-3.71|Puertollano/38.69/-4.11|Tomelloso/39.16/-3.02|Valdepeñas/38.76/-3.39|Campo de Criptana/39.40/-3.12|Daimiel/39.07/-3.61
+Cuenca=Cuenca/40.07/-2.13|Tarancón/40.01/-3.00|Alarcón/39.54/-2.08
+Guadalajara=Guadalajara/40.63/-3.17|Sigüenza/41.07/-2.64|Pastrana/40.41/-2.92|Brihuega/40.76/-2.87
+Barcelona=Barcelona/41.39/2.17|Sitges/41.24/1.81|Badalona/41.45/2.25|L'Hospitalet de Llobregat/41.36/2.10|Terrassa/41.56/2.01|Sabadell/41.54/2.11|Mataró/41.54/2.44|Granollers/41.61/2.29|Manresa/41.73/1.83|Vic/41.93/2.25|Vilanova i la Geltrú/41.22/1.73|Castelldefels/41.28/1.98|Calella/41.61/2.66|Sant Cugat del Vallès/41.47/2.09|Montserrat/41.59/1.84|Cardona/41.91/1.68|Igualada/41.58/1.62|Berga/42.10/1.85|Sant Pol de Mar/41.60/2.62|Vilassar de Mar/41.51/2.39
+Girona=Girona/41.98/2.82|Figueres/42.27/2.96|Cadaqués/42.29/3.28|Roses/42.26/3.18|Lloret de Mar/41.70/2.84|Tossa de Mar/41.72/2.93|Blanes/41.67/2.79|Begur/41.95/3.21|Palamós/41.85/3.13|L'Escala/42.12/3.13|Besalú/42.20/2.70|Olot/42.18/2.49|Ripoll/42.20/2.19|Pals/41.97/3.15|Calella de Palafrugell/41.88/3.18|Castelló d'Empúries/42.26/3.07|Puigcerdà/42.43/1.93
+Lleida=Lleida/41.62/0.62|La Seu d'Urgell/42.36/1.46|Vielha/42.70/0.80|Tremp/42.17/0.89|Balaguer/41.79/0.81|Baqueira/42.70/0.93
+Tarragona=Tarragona/41.12/1.25|Salou/41.08/1.14|Cambrils/41.07/1.06|Reus/41.15/1.11|Tortosa/40.81/0.52|L'Ametlla de Mar/40.88/0.80|Altafulla/41.14/1.38|Miami Platja/41.00/0.99|Poblet/41.38/1.08|Deltebre/40.72/0.71|Siurana/41.26/0.93
+Ceuta=Ceuta/35.89/-5.32
+Melilla=Melilla/35.29/-2.94
+Valencia=Valencia/39.47/-0.38|Gandía/38.97/-0.18|Sagunto/39.68/-0.28|Xàtiva/38.99/-0.52|Cullera/39.16/-0.25|Torrent/39.44/-0.47|Paterna/39.50/-0.44|Requena/39.49/-1.10|Alzira/39.15/-0.43|Albufera/39.33/-0.33|Oliva/38.92/-0.12
+Alicante=Alicante/38.35/-0.48|Elche/38.27/-0.70|Benidorm/38.54/-0.13|Torrevieja/37.98/-0.68|Orihuela/38.08/-0.94|Alcoy/38.70/-0.47|Dénia/38.84/0.11|Jávea/38.79/0.17|Calpe/38.64/0.04|Altea/38.60/-0.05|Villajoyosa/38.51/-0.23|Santa Pola/38.19/-0.56|Guardamar del Segura/38.09/-0.65|Villena/38.64/-0.87|Elda/38.48/-0.79|Moraira/38.69/0.13|Tabarca/38.17/-0.47|Guadalest/38.68/-0.20
+Castellón=Castellón de la Plana/39.99/-0.04|Peñíscola/40.36/0.40|Vinaròs/40.47/0.48|Benicàssim/40.05/0.07|Morella/40.62/-0.10|Oropesa del Mar/40.09/0.15|Vila-real/39.94/-0.10|Segorbe/39.85/-0.49|Alcossebre/40.23/0.28
+Badajoz=Badajoz/38.88/-6.97|Mérida/38.92/-6.34|Zafra/38.42/-6.42|Olivenza/38.68/-7.10|Jerez de los Caballeros/38.32/-6.77|Almendralejo/38.68/-6.41|Villanueva de la Serena/38.97/-5.80|Don Benito/38.96/-5.86
+Cáceres=Cáceres/39.47/-6.37|Plasencia/40.03/-6.09|Trujillo/39.46/-5.88|Guadalupe/39.45/-5.33|Coria/39.99/-6.54|Navalmoral de la Mata/39.89/-5.54|Jarandilla de la Vera/40.12/-5.65|Garganta la Olla/40.11/-5.80
+A Coruña=A Coruña/43.37/-8.40|Santiago de Compostela/42.88/-8.54|Ferrol/43.48/-8.24|Betanzos/43.28/-8.21|Muros/42.78/-9.06|Fisterra/42.91/-9.26|Muxía/43.10/-9.22|Cedeira/43.66/-8.05|Noia/42.79/-8.89|Carballo/43.21/-8.69|Ribeira/42.55/-9.00|Ortigueira/43.68/-7.85|Costa da Morte/43.00/-9.10
+Lugo=Lugo/43.01/-7.56|Ribadeo/43.54/-7.04|Viveiro/43.66/-7.59|Monforte de Lemos/42.52/-7.51|Sarria/42.78/-7.41|Portomarín/42.81/-7.62|Foz/43.57/-7.25|O Cebreiro/42.71/-7.04
+Ourense=Ourense/42.34/-7.86|Allariz/42.19/-7.80|Verín/41.94/-7.44|O Barco de Valdeorras/42.41/-6.99|Celanova/42.15/-7.96|Ribadavia/42.29/-8.14
+Pontevedra=Pontevedra/42.43/-8.64|Vigo/42.24/-8.72|Sanxenxo/42.40/-8.80|O Grove/42.49/-8.86|Baiona/42.12/-8.85|Cambados/42.51/-8.81|Tui/42.05/-8.65|A Guarda/41.90/-8.87|Vilagarcía de Arousa/42.60/-8.77|Cangas/42.26/-8.78|Combarro/42.43/-8.70|Islas Cíes/42.22/-8.90|Illa de Arousa/42.55/-8.87
+La Rioja=Logroño/42.47/-2.45|Haro/42.58/-2.85|Calahorra/42.30/-1.96|Santo Domingo de la Calzada/42.44/-2.95|Nájera/42.42/-2.73|Arnedo/42.23/-2.10|San Millán de la Cogolla/42.32/-2.86|Ezcaray/42.33/-3.00|Briones/42.54/-2.78
+Madrid=Madrid/40.42/-3.70|Alcalá de Henares/40.48/-3.36|Aranjuez/40.03/-3.60|San Lorenzo de El Escorial/40.59/-4.15|Getafe/40.31/-3.73|Móstoles/40.32/-3.87|Alcobendas/40.54/-3.64|Fuenlabrada/40.28/-3.79|Leganés/40.33/-3.76|Torrejón de Ardoz/40.46/-3.48|Alcorcón/40.35/-3.82|Las Rozas/40.49/-3.87|Chinchón/40.14/-3.42|Navacerrada/40.73/-4.01|Rascafría/40.91/-3.88|Pozuelo de Alarcón/40.44/-3.81|Majadahonda/40.47/-3.87|Parla/40.24/-3.77|Arganda del Rey/40.30/-3.44|Colmenar Viejo/40.66/-3.77|San Sebastián de los Reyes/40.55/-3.63|San Martín de Valdeiglesias/40.35/-4.40|Patones/40.88/-3.45|Buitrago del Lozoya/40.99/-3.63|Cercedilla/40.74/-4.06|San Martín de la Vega/40.21/-3.57|Manzanares el Real/40.73/-3.86
+Murcia=Murcia/37.99/-1.13|Cartagena/37.60/-0.99|Lorca/37.67/-1.70|La Manga del Mar Menor/37.63/-0.72|Águilas/37.41/-1.58|Mazarrón/37.60/-1.31|Caravaca de la Cruz/38.11/-1.86|Molina de Segura/38.05/-1.21|San Pedro del Pinatar/37.84/-0.79|Cieza/38.24/-1.42|Yecla/38.61/-1.12|Jumilla/38.48/-1.33|Totana/37.77/-1.50|Torre-Pacheco/37.74/-0.96|Los Alcázares/37.74/-0.85|Puerto de Mazarrón/37.56/-1.25
+Navarra=Pamplona/42.82/-1.64|Tudela/42.06/-1.61|Estella-Lizarra/42.67/-2.03|Olite/42.48/-1.65|Sangüesa/42.57/-1.28|Elizondo/43.15/-1.51|Roncesvalles/43.01/-1.32|Tafalla/42.53/-1.67|Viana/42.51/-2.37|Puente la Reina/42.67/-1.81|Zugarramurdi/43.26/-1.57|Ujué/42.50/-1.52
+Bizkaia=Bilbao/43.26/-2.93|Getxo/43.36/-3.01|Barakaldo/43.30/-2.99|Bermeo/43.42/-2.72|Gernika-Lumo/43.32/-2.68|Lekeitio/43.37/-2.50|Mundaka/43.41/-2.70|Ondarroa/43.32/-2.42|Durango/43.17/-2.63|Portugalete/43.32/-3.02|Plentzia/43.41/-2.95|Sopelana/43.38/-2.98|Elantxobe/43.41/-2.64
+Gipuzkoa=San Sebastián/43.32/-1.98|Hondarribia/43.36/-1.79|Zarautz/43.28/-2.17|Getaria/43.30/-2.20|Zumaia/43.30/-2.25|Irun/43.34/-1.79|Mutriku/43.31/-2.38|Eibar/43.18/-2.47|Tolosa/43.14/-2.07|Oñati/43.03/-2.41|Pasaia/43.32/-1.93|Deba/43.30/-2.35|Rentería/43.31/-1.90|Loiola/43.29/-2.00
+Álava=Vitoria-Gasteiz/42.85/-2.67|Laguardia/42.55/-2.58|Elciego/42.52/-2.62|Salinas de Añana/42.80/-2.99|Llodio/43.14/-2.96|Amurrio/43.05/-3.00`;
+const ESP=[];ESC.split('\n').forEach(l=>{const i=l.indexOf('='),pr=l.slice(0,i);l.slice(i+1).split('|').forEach(e=>{const q=e.split('/');ESP.push([q[0],pr]);CITY[q[0]]=[+q[1],+q[2]]})});
+const ESN=new Set(ESP.map(x=>x[0]));
+'Álava,Albacete,Alicante,Almería,Asturias,Ávila,Badajoz,Baleares,Barcelona,Burgos,Cáceres,Cádiz,Cantabria,Castellón,Ciudad Real,Córdoba,A Coruña,Cuenca,Girona,Granada,Guadalajara,Gipuzkoa,Huelva,Huesca,Jaén,León,Lleida,Lugo,Madrid,Málaga,Murcia,Navarra,Ourense,Palencia,Las Palmas,Pontevedra,La Rioja,Salamanca,Santa Cruz de Tenerife,Segovia,Sevilla,Soria,Tarragona,Teruel,Toledo,Valencia,Valladolid,Bizkaia,Zamora,Zaragoza'.split(',').filter(n=>!ESN.has(n)).forEach(n=>P.push([n,'ES','España','Provincia','']));
+ESP.forEach(([n,pr])=>P.push([n,'ES','España',pr,pr]));
+'París:FR:Francia,Niza:FR:Francia,Roma:IT:Italia,Florencia:IT:Italia,Venecia:IT:Italia,Milán:IT:Italia,Lisboa:PT:Portugal,Oporto:PT:Portugal,Berlín:DE:Alemania,Múnich:DE:Alemania,Ámsterdam:NL:Países Bajos,Bruselas:BE:Bélgica,Brujas:BE:Bélgica,Londres:GB:Reino Unido,Edimburgo:GB:Reino Unido,Dublín:IE:Irlanda,Viena:AT:Austria,Praga:CZ:Chequia,Budapest:HU:Hungría,Cracovia:PL:Polonia,Atenas:GR:Grecia,Estambul:TR:Turquía,Marrakech:MA:Marruecos,Tokio:JP:Japón,Kioto:JP:Japón,Nueva York:US:Estados Unidos,Miami:US:Estados Unidos,Ciudad de México:MX:México,Buenos Aires:AR:Argentina,Reikiavik:IS:Islandia,Copenhague:DK:Dinamarca'.split(',').forEach(s=>{const[a,b,c]=s.split(':');P.push([a,b,c,'Ciudad',''])});
+const CTR=`Alemania:DE:51:10|Andorra:AD:42.5:1.5|Argelia:DZ:28:2.6|Argentina:AR:-34:-64|Armenia:AM:40.1:45|Australia:AU:-25:134|Austria:AT:47.5:14.5|Bahamas:BS:24.3:-76|Bélgica:BE:50.6:4.6|Bolivia:BO:-17:-65|Bosnia y Herzegovina:BA:44:17.8|Brasil:BR:-10:-52|Bulgaria:BG:42.7:25.5|Cabo Verde:CV:16:-24|Camboya:KH:12.5:105|Canadá:CA:56:-96|Catar:QA:25.3:51.2|Chequia:CZ:49.8:15.5|Chile:CL:-33:-71|China:CN:35:103|Chipre:CY:35:33|Colombia:CO:4:-72|Corea del Sur:KR:36.5:127.8|Costa Rica:CR:9.9:-84|Croacia:HR:45.1:15.2|Cuba:CU:21.5:-79|Dinamarca:DK:56:10|Ecuador:EC:-1.5:-78.5|Egipto:EG:27:30|El Salvador:SV:13.8:-88.9|Emiratos Árabes Unidos:AE:24:54|Eslovaquia:SK:48.7:19.5|Eslovenia:SI:46.1:14.8|España:ES:40:-3.7|Estados Unidos:US:39:-98|Estonia:EE:58.7:25.5|Etiopía:ET:9:40|Filipinas:PH:12.8:122|Finlandia:FI:62:26|Fiyi:FJ:-17.7:178|Francia:FR:46.6:2.4|Georgia:GE:42:43.5|Ghana:GH:7.9:-1|Gibraltar:GI:36.14:-5.35|Grecia:GR:39:22|Guatemala:GT:15.5:-90.3|Honduras:HN:14.8:-86.6|Hong Kong:HK:22.3:114.2|Hungría:HU:47:19.5|India:IN:22:79|Indonesia:ID:-2:118|Irán:IR:32:53|Irlanda:IE:53:-8|Islandia:IS:65:-18|Israel:IL:31.5:35|Italia:IT:42.8:12.5|Jamaica:JM:18.1:-77.3|Japón:JP:36:138|Jordania:JO:31:36.5|Kazajistán:KZ:48:68|Kenia:KE:0.2:38|Laos:LA:19.8:102.5|Letonia:LV:56.9:24.6|Líbano:LB:33.9:35.9|Lituania:LT:55.3:23.9|Luxemburgo:LU:49.8:6.1|Madagascar:MG:-19:47|Malasia:MY:4.2:102|Maldivas:MV:3.2:73.2|Malta:MT:35.9:14.4|Marruecos:MA:31.8:-7|Mauricio:MU:-20.3:57.6|México:MX:23:-102|Mónaco:MC:43.74:7.42|Mongolia:MN:47:104|Montenegro:ME:42.7:19.3|Mozambique:MZ:-18.7:35.5|Namibia:NA:-22:17|Nepal:NP:28.4:84|Nicaragua:NI:12.9:-85|Noruega:NO:61:9|Nueva Zelanda:NZ:-41:174|Omán:OM:21:57|Países Bajos:NL:52.2:5.3|Panamá:PA:8.5:-80|Paraguay:PY:-23.4:-58.4|Perú:PE:-9.2:-75|Polonia:PL:52:19|Portugal:PT:39.6:-8|Puerto Rico:PR:18.2:-66.5|Reino Unido:GB:54:-2|República Dominicana:DO:18.9:-70.5|Rumanía:RO:45.9:25|Rusia:RU:60:100|San Marino:SM:43.94:12.46|Arabia Saudí:SA:24:45|Senegal:SN:14.5:-14.5|Serbia:RS:44:21|Singapur:SG:1.35:103.8|Sudáfrica:ZA:-29:24|Suecia:SE:62:15|Suiza:CH:46.8:8.2|Tailandia:TH:15:101|Taiwán:TW:23.7:121|Tanzania:TZ:-6.4:34.9|Túnez:TN:34:9.5|Turquía:TR:39:35|Ucrania:UA:49:32|Uruguay:UY:-33:-56|Uzbekistán:UZ:41.4:64.6|Vaticano:VA:41.9:12.45|Venezuela:VE:7:-66|Vietnam:VN:16:107.5|Zimbabue:ZW:-19:29.9|Albania:AL:41.1:20.1|Macedonia del Norte:MK:41.6:21.7|Sri Lanka:LK:7.9:80.7|Birmania:MM:21:96|Botsuana:BW:-22:24|Sudán del Sur:SS:7:30`.split('|').map(x=>{const q=x.split(':');return{name:q[0],iso:q[1],c:[+q[2],+q[3]]}});
+CTR.forEach(c=>{if(!CC[c.iso])CC[c.iso]=c.c;P.push([c.name,c.iso,c.name,'País',''])});
+const ctry=v=>{const q=norm((v||'').trim());return q?CTR.find(c=>norm(c.name)===q):null};
+const tcl=t=>(t.prov&&t.prov!==t.place?t.prov+' · ':'')+t.country;
+async function geo(c,pr,k){try{const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),4500);const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=es&q='+encodeURIComponent(c+', '+pr+', '+k),{signal:ctl.signal});clearTimeout(to);const j=await r.json();if(j&&j[0])return[+j[0].lat,+j[0].lon]}catch(e){}return null}
 const norm=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 // ===== flujos de añadir gasto =====
 let F={};const BACK={form:'cat',newtrip:'trips',texp:'trips'};
@@ -563,54 +643,73 @@ function openFlow(kind,pre){F={kind,who:pre||null,step:kind==='viajes'?'trips':'
 function closeFlow(){$('#flow').classList.remove('show');render()}
 const hdr=t=>`<div class="fh"><button class="back" data-a="back" aria-label="Atrás">←</button>${t}</div>`;
 const amtBox=`<div class="lbl">Importe *</div><div class="amt"><input id="imp" inputmode="decimal" placeholder="0,00"><span>€</span></div>`;
+const supBox=()=>F.kind==='revolut'&&F.cat==='Alimentación'?`<div class="lbl">Supermercado (opcional)</div><div class="sup">${SUPS.map(n=>`<button data-a="sup" data-n="${n}" class="${F.sup===n?'on':''}">🛒 ${n}</button>`).join('')}</div>`:'';
 const obsBox=`<div class="lbl">Observaciones (opcional)</div><input id="obs" placeholder="Añade una nota">`;
-function ticket(t){return `<div class="ticket" data-a="pick" data-id="${t.id}"><div class="tm"><small>✈ Billete de avión</small><div class="dest">${fl(t.iso)}${t.place}</div><small>${t.country}</small><div style="margin-top:10px"><small>Fechas</small><br><b>${fd(t.from)} — ${fd(t.to)}</b></div></div><div class="stub"><i class="bar"></i></div></div>`}
+function ticket(t){return `<div class="ticket" data-a="pick" data-id="${t.id}"><div class="tm"><small>✈ Billete de avión</small><div class="dest">${fl(t.iso)}${t.place}</div><small>${tcl(t)}</small><div style="margin-top:10px"><small>Fechas</small><br><b>${fd(t.from)} — ${fd(t.to)}</b></div></div><div class="stub"><i class="bar"></i></div></div>`}
 function dwrap(){const t=iso(new Date());return F.dm==='mes'?`<input type="month" id="mt" value="${(F.d||t).slice(0,7)}">`:F.dm==='sin'?`<p class="hint">Sin fecha concreta: contará en el mes actual.</p>`:`<input type="date" id="dt" value="${F.d||t}">`}
 function draw(){const s=F.step;let h='';
  setBg(s==='newtrip'?F.iso:s==='texp'?F.trip.iso:null);
  if(s==='cat'){const nar=F.kind==='naranja';
   h=hdr(nar?'🟠 Naranja':'⚫ Revolut')+`<div class="fb"><div class="lbl">Categoría</div><div class="cats">`+CATS[F.kind].map(([e,n])=>`<button class="cat" data-a="cat" data-n="${n}"><em>${e}</em>${n}</button>`).join('')+`<button class="cat sum" data-a="sumtrip"><em>✈️</em><span>Viajes<br><small style="font-weight:500">Resumen de viajes pagados con ${nar?'Naranja':'Revolut'}</small></span></button></div></div>`}
  if(s==='form'){F.dm=F.dm||'dia';
-  h=hdr(F.cat)+`<div class="fb"><div class="lbl">${F.edit?'Editar gasto':'Nuevo gasto'} · ${F.kind==='naranja'?'🟠 Naranja':'⚫ Revolut'}</div><div class="lbl">Fecha</div><div class="seg">${[['dia','Día'],['mes','Solo mes'],['sin','Sin fecha']].map(([k,n])=>`<button data-a="dm" data-m="${k}" class="${F.dm===k?'on':''}">${n}</button>`).join('')}</div><div id="dw" style="margin-top:8px">${dwrap()}</div>${amtBox}<div class="err" id="err"></div>${obsBox}<button class="save" data-a="save">GUARDAR</button></div>`}
+  h=hdr(F.cat)+`<div class="fb"><div class="lbl">${F.edit?'Editar gasto':'Nuevo gasto'} · ${F.kind==='naranja'?'🟠 Naranja':'⚫ Revolut'}</div><div class="lbl">Fecha</div><div class="seg">${[['dia','Día'],['mes','Solo mes'],['sin','Sin fecha']].map(([k,n])=>`<button data-a="dm" data-m="${k}" class="${F.dm===k?'on':''}">${n}</button>`).join('')}</div><div id="dw" style="margin-top:8px">${dwrap()}</div>${supBox()}${amtBox}<div class="err" id="err"></div>${obsBox}<button class="save" data-a="save">GUARDAR</button></div>`}
  if(s==='trips'){
   h=hdr('✈️ Viajes')+`<div class="fb"><div class="lbl">¿A dónde viajas?</div>${trips.map(ticket).join('')}<div class="ticket new" data-a="newtrip"><span>🎫✈️</span><b>Añadir nuevo viaje</b></div></div>`}
- if(s==='newtrip'){
-  h=hdr('Nuevo viaje')+`<div class="fb"><div class="ticket form"><div class="tm"><small>✈ Billete de avión</small><div class="lbl" style="margin-top:12px">Lugar</div><input id="lug" autocomplete="off" placeholder="Madrid, Oviedo, Japón…" value="${F.place||''}"><div class="sug" id="sug"></div><div class="lbl">Fechas</div><div class="dates"><input type="date" id="d1" value="${F.d1||''}"><span>—</span><input type="date" id="d2" value="${F.d2||''}"></div></div><div class="stub"><i class="bar"></i></div></div><div class="err" id="err"></div><button class="save" data-a="next">SIGUIENTE →</button></div>`}
+ if(s==='newtrip'){const place=F.man?`<div class="lbl" style="margin-top:12px">Ciudad *</div><input id="mc" autocomplete="off" placeholder="Ciudad o pueblo" value="${escH(F.mc||'')}"><div class="lbl">Provincia / región *</div><input id="mp" autocomplete="off" placeholder="Provincia, estado o región" value="${escH(F.mp||'')}"><div class="lbl">País *</div><input id="mk" list="ctl" autocomplete="off" placeholder="Empieza a escribir el país" value="${escH(F.mk||'')}"><datalist id="ctl">${CTR.map(c=>`<option value="${c.name}">`).join('')}</datalist><button class="lk" data-a="lista">← Volver a buscar en la lista</button>`:`<div class="lbl" style="margin-top:12px">Lugar</div><input id="lug" autocomplete="off" placeholder="Madrid, Oviedo, Japón…" value="${escH(F.place||'')}"><div class="sug" id="sug"></div><button class="lk" data-a="manual">¿No está en la lista? Añadir manualmente</button>`;
+  h=hdr('Nuevo viaje')+`<div class="fb"><div class="ticket form"><div class="tm"><small>✈ Billete de avión</small>${place}<div class="lbl">Fechas</div><div class="dates"><input type="date" id="d1" value="${F.d1||''}"><span>—</span><input type="date" id="d2" value="${F.d2||''}"></div></div><div class="stub"><i class="bar"></i></div></div><div class="err" id="err"></div><button class="save" data-a="next">SIGUIENTE →</button></div>`}
  if(s==='texp'){const t=F.trip;
   h=hdr('Gasto del viaje')+`<div class="fb"><div class="ticket mini"><div class="tm"><div class="dest" style="font-size:20px;margin:0">${fl(t.iso)}${t.place}</div><small>${fd(t.from)} — ${fd(t.to)}</small></div></div><div class="lbl">Categoría</div><select id="tc">${TC.map(([e,n])=>`<option>${e} ${n}</option>`).join('')}</select>${amtBox}<div class="lbl">Corresponde a</div><div class="who">${[['🟠','Naranja'],['⚫','Revolut'],['👩','Alba'],['👨','David']].map(([e,n])=>`<button data-a="who" data-n="${n}" class="${F.who===n?'on':''}"><em>${e}</em>${n}</button>`).join('')}</div><div class="lbl">Fecha</div><input type="date" id="dt" value="${iso(new Date())}"><div class="err" id="err"></div>${obsBox}<button class="save" data-a="save">GUARDAR</button></div>`}
  if(s==='detail'){const e=F.e,t=e.trip&&trips.find(x=>x.id===e.trip);
-  h=hdr('Detalle del gasto')+`<div class="fb"><div class="det">${[['Fecha',e.d?fd(e.d):'Solo mes · '+months[+e.m.slice(5)-1]],['Importe',fmt(e.amt)],['Categoría',e.cat],[e.kind==='trip'?'Corresponde a':'Cuenta',e.kind==='trip'?e.to:e.acc],['Observaciones',e.obs||'—'],...(t?[['Viaje',t.place+' · '+rng(t)]]:[])].map(([a,b])=>`<div><small>${a}</small><b>${b}</b></div>`).join('')}</div><button class="save" data-a="edit">Editar</button><button class="save del" data-a="del">Eliminar</button></div>`}
+  h=hdr('Detalle del gasto')+`<div class="fb"><div class="det">${[['Fecha',e.d?fd(e.d):'Solo mes · '+months[+e.m.slice(5)-1]],['Importe',fmt(e.amt)],['Categoría',e.cat],...(e.sup?[['Supermercado',e.sup]]:[]),[e.kind==='trip'?'Corresponde a':'Cuenta',e.kind==='trip'?e.to:e.acc],['Observaciones',e.obs||'—'],...(t?[['Viaje',t.place+' · '+rng(t)]]:[])].map(([a,b])=>`<div><small>${a}</small><b>${b}</b></div>`).join('')}</div><button class="save" data-a="edit">Editar</button><button class="save del" data-a="del">Eliminar</button></div>`}
+ if(s==='adj'){const b=bal(F.acc,F.y,F.mo)||{pre:0,aj:0,cl:0};
+  h=hdr('⚖️ Ajustar saldo · '+F.acc)+`<div class="fb"><div class="lbl">Mes</div><p style="margin:4px 2px;font-size:18px;font-weight:700">${months[F.mo-1]} ${F.y}</p><div class="bal" style="margin:8px 0"><div class="r"><span>Saldo calculado por la app</span><b>${fmt(b.pre)}</b></div>${b.aj?`<div class="r"><span>Ajuste actual</span><b>${sg(b.aj)}</b></div>`:''}</div><div class="lbl">Saldo real en la cuenta *</div><div class="amt"><input id="real" inputmode="decimal" placeholder="0,00"><span>€</span></div><p class="hint">Mira el saldo en tu banco e indícalo. La app guarda la diferencia como ajuste de este mes y el nuevo saldo pasa al mes siguiente.</p><div class="err" id="err"></div><button class="save" data-a="adjsave">GUARDAR AJUSTE</button>${b.aj?`<button class="save del" data-a="adjdel" style="margin-top:10px">Quitar ajuste</button>`:''}</div>`}
  if(s==='extra')h=hdr('Ingreso extra · '+F.acc)+`<div class="fb"><div class="lbl">Mes</div><p style="margin:4px 2px;font-size:18px;font-weight:700">${months[F.mo-1]} ${F.y}</p>${amtBox}<div class="err" id="err"></div>${obsBox}<button class="save" data-a="save">GUARDAR</button></div>`;
  fw.innerHTML=h;fw.scrollTop=0;
  if(F.edit&&(s==='form'||s==='texp')){const e=F.edit;$('#imp').value=String(e.amt).replace('.',',');$('#obs').value=e.obs||'';if(s==='texp'){$('#tc').value=e.cat;$('#dt').value=e.d||''}}}
 function openExtra(a,y,mo){F={step:'extra',acc:a,y,mo};$('#flow').classList.add('show');draw()}
+async function nextTrip(btn){F.d1=$('#d1').value;F.d2=$('#d2').value;
+ if(F.man){F.mc=$('#mc').value.trim();F.mp=$('#mp').value.trim();F.mk=$('#mk').value.trim();
+  if(!F.mc||!F.mp||!F.mk)return err('Rellena ciudad, provincia y país');const c=ctry(F.mk);if(!c)return err('Elige el país de la lista para poder poner su bandera');
+  F.place=F.mc;F.prov=F.mp;F.iso=c.iso;F.country=c.name}
+ if(!F.iso)return err('Elige un lugar de la lista o añádelo manualmente');if(!F.d1||!F.d2)return err('Indica las dos fechas');if(F.d2<F.d1)return err('La vuelta no puede ser antes de la ida');
+ const t={id:uid(),place:F.place,prov:F.prov||'',iso:F.iso,country:F.country,from:F.d1,to:F.d2};
+ if(F.man){btn.disabled=true;err('Buscando el lugar en el mapa…');const g=await geo(F.mc,F.mp,F.mk);btn.disabled=false;if(g){t.lat=g[0];t.lon=g[1]}}
+ saveDoc('trips',t);F.trip=t;F.step='texp';draw()}
+function openAdj(a,y,mo){F={step:'adj',acc:a,y,mo};$('#flow').classList.add('show');draw();const b=bal(a,y,mo);if(b&&b.aj)$('#real').value=String(Math.round(b.cl*100)/100).replace('.',',')}
 function openDetail(id){F={step:'detail',e:E.find(e=>e.id===id)};$('#flow').classList.add('show');draw()}
 const err=t=>{$('#err').textContent=t};
 function amount(){const v=parseFloat(($('#imp').value||'').replace(',','.'));if(!(v>0)){err('Introduce un importe mayor que 0');$('#imp').focus();return null}return v}
 fw.onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
  if(a==='back'){if(BACK[F.step]&&!F.edit){F.step=BACK[F.step];draw()}else closeFlow()}
- else if(a==='cat'){F.cat=b.dataset.n;F.dm='dia';F.d=null;F.step='form';draw()}
+ else if(a==='cat'){F.cat=b.dataset.n;F.sup='';F.dm='dia';F.d=null;F.step='form';draw()}
  else if(a==='sumtrip')openFlow('viajes',F.kind==='naranja'?'Naranja':'Revolut');
  else if(a==='dm'){const c=$('#dt');if(c)F.d=c.value;F.dm=b.dataset.m;fw.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on',x===b));$('#dw').innerHTML=dwrap()}
- else if(a==='newtrip'){F.place='';F.iso=null;F.d1=F.d2='';F.step='newtrip';draw()}
+ else if(a==='newtrip'){F.place='';F.iso=null;F.d1=F.d2='';F.man=false;F.mc=F.mp=F.mk='';F.prov='';F.lat=F.lon=null;F.step='newtrip';draw()}
+ else if(a==='manual'){F.d1=$('#d1').value;F.d2=$('#d2').value;F.mc=($('#lug').value||'').trim();F.mp=F.mk='';F.man=true;F.iso=null;F.prov='';draw()}
+ else if(a==='lista'){F.d1=$('#d1').value;F.d2=$('#d2').value;F.man=false;F.place='';F.iso=null;F.prov='';draw()}
  else if(a==='pick'){F.trip=trips.find(t=>t.id==b.dataset.id);F.step='texp';draw()}
- else if(a==='sel'){const p=P[b.dataset.i];F.place=p[0];F.iso=p[1];F.country=p[2];$('#lug').value=p[0];$('#sug').innerHTML='';err('');setBg(p[1])}
- else if(a==='next'){F.d1=$('#d1').value;F.d2=$('#d2').value;
-  if(!F.iso)return err('Elige un lugar de la lista');if(!F.d1||!F.d2)return err('Indica las dos fechas');if(F.d2<F.d1)return err('La vuelta no puede ser antes de la ida');
-  const t={id:uid(),place:F.place,iso:F.iso,country:F.country,from:F.d1,to:F.d2};saveDoc('trips',t);F.trip=t;F.step='texp';draw()}
- else if(a==='edit'){const e=F.e;F=e.kind==='trip'?{kind:'viajes',trip:trips.find(t=>t.id===e.trip),step:'texp',who:e.to,edit:e}:{kind:e.acc.toLowerCase(),cat:e.cat,step:'form',edit:e,dm:e.d?'dia':'mes',d:e.d||e.m+'-01'};draw()}
+ else if(a==='sel'){const p=P[b.dataset.i];F.place=p[0];F.iso=p[1];F.country=p[2];F.prov=p[4]||'';$('#lug').value=p[0];$('#sug').innerHTML='';err('');setBg(p[1])}
+ else if(a==='next')nextTrip(b)
+ else if(a==='edit'){const e=F.e;F=e.kind==='trip'?{kind:'viajes',trip:trips.find(t=>t.id===e.trip),step:'texp',who:e.to,edit:e}:{kind:e.acc.toLowerCase(),cat:e.cat,sup:e.sup||'',step:'form',edit:e,dm:e.d?'dia':'mes',d:e.d||e.m+'-01'};draw()}
  else if(a==='del'){if(!F.conf){F.conf=1;b.textContent='Pulsa otra vez para eliminar';return}delDoc('E',F.e.id);toast('Gasto eliminado');closeFlow()}
+ else if(a==='sup'){F.sup=F.sup===b.dataset.n?'':b.dataset.n;fw.querySelectorAll('.sup button').forEach(x=>x.classList.toggle('on',x.dataset.n===F.sup))}
  else if(a==='who'){F.who=b.dataset.n;fw.querySelectorAll('.who button').forEach(x=>x.classList.toggle('on',x===b))}
+ else if(a==='adjsave'){const v=parseFloat(($('#real').value||'').replace(',','.'));if(isNaN(v))return err('Introduce el saldo real (puede ser 0)');const b=bal(F.acc,F.y,F.mo),aj=Math.round((v-b.pre)*100)/100,id='adj-'+F.acc+'-'+K(F.y,F.mo);
+  if(Math.abs(aj)<.005){if(EX.some(x=>x.id===id))delDoc('EX',id)}else saveDoc('EX',{id,acc:F.acc,m:K(F.y,F.mo),amt:aj,obs:'Ajuste manual',adj:true});toast('Saldo ajustado ✓');closeFlow()}
+ else if(a==='adjdel'){delDoc('EX','adj-'+F.acc+'-'+K(F.y,F.mo));toast('Ajuste quitado');closeFlow()}
  else if(a==='save'){const amt=amount();if(amt==null)return;const obs=$('#obs').value,cur=iso(new Date()).slice(0,7);let o;
   if(F.step==='extra'){saveDoc('EX',{id:uid(),acc:F.acc,m:K(F.y,F.mo),amt,obs});toast('Ingreso extra añadido ✓');closeFlow();return}
   if(F.step==='form'){let m=cur,d=null;if(F.dm==='dia'){d=$('#dt').value||iso(new Date());m=d.slice(0,7)}if(F.dm==='mes')m=$('#mt').value||cur;
-   o={kind:'casa',acc:F.kind==='naranja'?'Naranja':'Revolut',cat:F.cat,amt,d,m,obs};toast(F.edit?'Cambios guardados ✓':'Gasto guardado ✓')}
+   o={kind:'casa',acc:F.kind==='naranja'?'Naranja':'Revolut',cat:F.cat,amt,d,m,obs};if(F.kind==='revolut'&&F.cat==='Alimentación')o.sup=F.sup||'';toast(F.edit?'Cambios guardados ✓':'Gasto guardado ✓')}
   else{if(!F.who)return err('Elige a quién corresponde');const d=$('#dt').value||iso(new Date());
    o={kind:'trip',to:F.who,cat:$('#tc').value,amt,d,m:d.slice(0,7),trip:F.trip.id,obs};toast(F.edit?'Cambios guardados ✓':'Gasto de viaje guardado ✓')}
   saveDoc('E',F.edit?{...F.edit,...o}:{id:uid(),...o});closeFlow()}};
-fw.oninput=e=>{if(e.target.id!=='lug')return;const v=e.target.value,q=norm(v.trim());F.place=v;F.iso=null;setBg(null);
- const r=q?P.map((p,i)=>[p,i]).filter(([p])=>norm(p[0]).includes(q)).sort((a,b)=>(norm(b[0][0]).startsWith(q))-(norm(a[0][0]).startsWith(q))).slice(0,6):[];
- $('#sug').innerHTML=r.map(([p,i])=>`<button data-a="sel" data-i="${i}">${fl(p[1])}<b>${p[0]}</b><small>${p[3]} · ${p[2]}</small></button>`).join('')};
+fw.oninput=e=>{const id=e.target.id;
+ if(id==='mc'||id==='mp'){F[id]=e.target.value;return}
+ if(id==='mk'){F.mk=e.target.value;const c=ctry(F.mk);F.iso=c?c.iso:null;setBg(F.iso);return}
+ if(id!=='lug')return;const v=e.target.value,q=norm(v.trim());F.place=v;F.iso=null;setBg(null);
+ const r=q?P.map((p,i)=>[p,i]).filter(([p])=>norm(p[0]).includes(q)).sort((a,b)=>(norm(b[0][0]).startsWith(q))-(norm(a[0][0]).startsWith(q))||(a[0][3]==='País')-(b[0][3]==='País')).slice(0,7):[];
+ $('#sug').innerHTML=r.map(([p,i])=>`<button data-a="sel" data-i="${i}">${fl(p[1])}<b>${p[0]}</b><small>${p[3]} · ${p[2]}</small></button>`).join('')+(q.length>1&&!r.length?`<button data-a="manual"><b>No encuentro «${escH(v.trim())}»</b><small>Añadir manualmente</small></button>`:'')};
 $('#sheet').onclick=e=>{const k=e.target.closest('[data-k]');if(k)openFlow(k.dataset.k);else if(e.target.id==='sheet')$('#sheet').classList.remove('show')};
 
 // ===== acceso, ajustes e importación =====
@@ -658,7 +757,7 @@ function pamt(s){s=(s||'').replace(/[€\s]/g,'');if(!s)return NaN;
  if(s.includes(',')&&s.includes('.'))s=s.replace(/\./g,'').replace(',','.');else if(s.includes(','))s=s.replace(',','.');else if(/^\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'');
  return /^\d+(\.\d+)?$/.test(s)?Math.round(parseFloat(s)*100)/100:NaN}
 function h53(s){let a=0xdeadbeef,b=0x41c6ce57;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,2654435761);b=Math.imul(b^c,1597334677)}a=Math.imul(a^(a>>>16),2246822507)^Math.imul(b^(b>>>13),3266489909);b=Math.imul(b^(b>>>16),2246822507)^Math.imul(a^(a>>>13),3266489909);return (4294967296*(2097151&b)+(a>>>0)).toString(36)}
-const HK={fecha:['fecha','dia','date'],cuenta:['cuenta','asignacion','cuentaasignacion','correspondea','pagadocon','pagado'],cat:['categoria','categorias','tipo'],imp:['importe','cantidad','total','euros','precio'],obs:['observaciones','observacion','notas','nota','concepto','comentario','descripcion'],viaje:['viaje','destino'],ida:['ida','inicio','desde','fechaida'],vuelta:['vuelta','fin','hasta','fechavuelta']};
+const HK={fecha:['fecha','dia','date'],cuenta:['cuenta','asignacion','cuentaasignacion','correspondea','pagadocon','pagado'],cat:['categoria','categorias','tipo'],imp:['importe','cantidad','total','euros','precio'],obs:['observaciones','observacion','notas','nota','concepto','comentario','descripcion'],sup:['supermercado','super','tienda'],viaje:['viaje','destino'],ida:['ida','inicio','desde','fechaida'],vuelta:['vuelta','fin','hasta','fechavuelta']};
 function parseImport(txt){const all=csvRows(txt),res={items:[],errs:[],nCasa:0,nViaje:0,nTrips:0,total:0};
  let hi=all.findIndex(r=>r.some(x=>x));if(hi<0){res.errs.push([1,'No hay datos']);return res}
  const col={};all[hi].forEach((x,i)=>{const k=norm(x).replace(/[^a-z]/g,'');for(const f in HK)if(HK[f].includes(k)&&col[f]===undefined)col[f]=i});
@@ -673,7 +772,9 @@ function parseImport(txt){const all=csvRows(txt),res={items:[],errs:[],nCasa:0,n
    if(cu==='Alba'||cu==='David'){res.errs.push([n,cu+' solo se usa en gastos de viaje: rellena la columna Viaje']);continue}
    const L=CATS[cu.toLowerCase()];let c=L.find(x=>norm(x[1])===cn),obs=obs0;if(!c){c=L[L.length-1];obs=(obs0?obs0+' · ':'')+'['+(g(r,'cat')||'sin categoría')+']'}
    const sig=JSON.stringify(['c',cu,c[1],am,fe.d||fe.m,obs]);occ[sig]=(occ[sig]||0)+1;
-   exp.push({id:'i'+h53(sig+'#'+occ[sig]),kind:'casa',acc:cu,cat:c[1],amt:am,d:fe.d,m:fe.m,obs});res.nCasa++}
+   const o2={id:'i'+h53(sig+'#'+occ[sig]),kind:'casa',acc:cu,cat:c[1],amt:am,d:fe.d,m:fe.m,obs};
+   if(cu==='Revolut'&&c[1]==='Alimentación'){const sp=SUPS.find(x=>norm(g(r,'sup')).includes(norm(x))||norm(obs0).includes(norm(x)));if(sp)o2.sup=sp}
+   exp.push(o2);res.nCasa++}
   else{
    let tc=TC.find(x=>norm(x[1])===cn),obs=obs0;if(!tc){tc=TC[TC.length-1];obs=(obs0?obs0+' · ':'')+'['+(g(r,'cat')||'sin categoría')+']'}
    const pn=norm(via),pl=P.find(p=>norm(p[0])===pn),ex=trips.filter(t=>norm(t.place)===pn);
@@ -681,8 +782,8 @@ function parseImport(txt){const all=csvRows(txt),res={items:[],errs:[],nCasa:0,n
    const ida=g(r,'ida')?pdate(g(r,'ida')):null,vue=g(r,'vuelta')?pdate(g(r,'vuelta')):null;
    if((g(r,'ida')&&!(ida&&ida.d))||(g(r,'vuelta')&&!(vue&&vue.d))){res.errs.push([n,'Fechas de ida/vuelta no válidas']);continue}
    let tid=null;
-   if(ida&&vue){const e1=ex.find(t=>t.from===ida.d&&t.to===vue.d);if(e1)tid=e1.id;else{const k=pn+'|'+ida.d+'|'+vue.d;tid='it'+h53(k);nw[tid]=nw[tid]||{id:tid,place:pl[0],iso:pl[1],country:pl[2],from:ida.d,to:vue.d,ds:[]}}}
-   else{const e1=fe.d&&ex.find(t=>t.from<=fe.d&&fe.d<=t.to);if(e1)tid=e1.id;else{if(!pl){res.errs.push([n,'Ese gasto no cae en las fechas de ningún viaje existente a «'+via+'»: indica Ida y Vuelta']);continue}tid='it'+h53(pn+'|');nw[tid]=nw[tid]||{id:tid,place:pl[0],iso:pl[1],country:pl[2],from:null,to:null,ds:[]}}}
+   if(ida&&vue){const e1=ex.find(t=>t.from===ida.d&&t.to===vue.d);if(e1)tid=e1.id;else{const k=pn+'|'+ida.d+'|'+vue.d;tid='it'+h53(k);nw[tid]=nw[tid]||{id:tid,place:pl[0],iso:pl[1],prov:pl[4]||'',country:pl[2],from:ida.d,to:vue.d,ds:[]}}}
+   else{const e1=fe.d&&ex.find(t=>t.from<=fe.d&&fe.d<=t.to);if(e1)tid=e1.id;else{if(!pl){res.errs.push([n,'Ese gasto no cae en las fechas de ningún viaje existente a «'+via+'»: indica Ida y Vuelta']);continue}tid='it'+h53(pn+'|');nw[tid]=nw[tid]||{id:tid,place:pl[0],iso:pl[1],prov:pl[4]||'',country:pl[2],from:null,to:null,ds:[]}}}
    if(nw[tid])nw[tid].ds.push(fe.d||fe.m+'-01');
    const cat=tc[0]+' '+tc[1],sig=JSON.stringify(['v',tid,cu,cat,am,fe.d||fe.m,obs]);occ[sig]=(occ[sig]||0)+1;
    exp.push({id:'i'+h53(sig+'#'+occ[sig]),kind:'trip',trip:tid,cat,to:cu,amt:am,d:fe.d,m:fe.m,obs});res.nViaje++}

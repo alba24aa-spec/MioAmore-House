@@ -726,11 +726,12 @@ function localData(){try{return JSON.parse(localStorage.getItem('cm_data')||'nul
 function localCount(){const s=localData();return s?(s.E||[]).length+(s.trips||[]).length+(s.EX||[]).length:0}
 const COLS=['Fecha','Cuenta','Categoría','Importe','Observaciones','Viaje','Ida','Vuelta'];
 const TPL=[COLS,['05/01/2026','Naranja','Alquiler','650','',' ','',''],['12/01/2026','Revolut','Alimentación','84,30','Compra semanal','','',''],['02/2026','Naranja','GoFit','39','Solo mes','','',''],['14/05/2026','Naranja','Hotel','340','','Lisboa','14/05/2026','17/05/2026'],['15/05/2026','Alba','Comer','45,50','','Lisboa','14/05/2026','17/05/2026']].map(r=>r.map(x=>x.trim()));
+const APPV='6 · 28 oct 2026 (destinos, saldo, supermercados, Davi)';
 function drawSet(){let h='';const st=SV.step;
  if(st==='main'){const t={ok:'🟢 Sincronizado con la nube',loading:'⚪ Conectando…',err:'🔴 Error de sincronización',local:'⚪ Sin nube: datos solo en este móvil',signedout:'⚪ Sin iniciar sesión'}[SYNC]||'';
   h=shdr('Ajustes')+`<div class="fb"><div class="det"><div><small>Estado</small><b>${t}</b></div>${FBU?`<div><small>Sesión</small><b>${escH(FBU.email||'')}</b></div>`:''}</div>`+
    (SYNC==='ok'&&localCount()?`<div class="bn" style="margin-top:14px"><span>Hay ${localCount()} datos guardados solo en este móvil.</span><button data-s="up">Subir a la nube</button></div>`:'')+
-   `<button class="save" data-s="imp">Importar datos antiguos</button>`+(FBU?`<button class="save sec" data-s="out">Cerrar sesión</button>`:'')+`</div>`}
+   `<button class="save" data-s="imp">Importar datos antiguos</button>`+(FBU?`<button class="save sec" data-s="out">Cerrar sesión</button>`:'')+`<p class="sm" style="text-align:center;margin-top:18px">Versión ${APPV}</p></div>`}
  if(st==='imp'){h=shdr('Importar datos antiguos','main')+`<div class="fb"><p class="hint">Pega aquí las filas copiadas de Excel (con la cabecera) o elige un archivo CSV. Antes de guardar nada verás un resumen.</p><div class="lbl">Columnas</div><div class="cols">${COLS.map(c=>`<span>${c}</span>`).join('')}</div>
    <p class="sm">Fecha: 25/12/2025 o solo mes (12/2025). Cuenta: Naranja o Revolut (para viajes también Alba o David). Importe: 84,30. Viaje, Ida y Vuelta solo se rellenan en gastos de viaje: la categoría es entonces Hotel, Comer, etc.</p>
    <button class="save sec" style="margin-top:8px" data-s="tpl">Copiar plantilla (para pegar en Excel)</button><button class="save sec" style="margin-top:8px" data-s="dl">Descargar plantilla CSV</button>
